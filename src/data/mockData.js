@@ -6,7 +6,8 @@ export const restaurants = [
     rating: 4.8,
     time: "25-35 min",
     tags: ["Japanese", "Sushi", "Premium"],
-    priceRange: "$$$"
+    priceRange: "$$$",
+    offer: "20% OFF"
   },
   {
     id: 2,
@@ -15,7 +16,8 @@ export const restaurants = [
     rating: 4.5,
     time: "15-25 min",
     tags: ["American", "Burgers", "Fast Food"],
-    priceRange: "$$"
+    priceRange: "$$",
+    offer: "Free Delivery"
   },
   {
     id: 3,
@@ -24,7 +26,8 @@ export const restaurants = [
     rating: 4.7,
     time: "30-40 min",
     tags: ["Italian", "Pizza", "Pasta"],
-    priceRange: "$$"
+    priceRange: "$$",
+    offer: null
   },
   {
     id: 4,
@@ -33,7 +36,8 @@ export const restaurants = [
     rating: 4.9,
     time: "20-30 min",
     tags: ["Healthy", "Salads", "Vegan"],
-    priceRange: "$$$"
+    priceRange: "$$$",
+    offer: "15% OFF"
   }
 ];
 

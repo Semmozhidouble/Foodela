@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Clock } from 'lucide-react';
+import { Star, Clock, Tag } from 'lucide-react';
 
 const RestaurantCard = ({ data, index }) => {
   return (
@@ -8,7 +8,7 @@ const RestaurantCard = ({ data, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="glass-card rounded-3xl overflow-hidden group cursor-pointer"
+      className="glass-card rounded-3xl overflow-hidden group cursor-pointer hover:shadow-glow hover:border-primary/20"
     >
       <div className="relative h-48 overflow-hidden">
         <motion.img 
@@ -21,6 +21,12 @@ const RestaurantCard = ({ data, index }) => {
         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
           <span className="text-xs font-bold text-slate-800">{data.time}</span>
         </div>
+        {data.offer && (
+          <div className="absolute bottom-4 left-4 bg-primary/90 backdrop-blur-sm px-3 py-1 rounded-xl flex items-center gap-1 shadow-lg shadow-primary/20">
+            <Tag size={12} className="text-white" />
+            <span className="text-xs font-bold text-white">{data.offer}</span>
+          </div>
+        )}
       </div>
       
       <div className="p-5">

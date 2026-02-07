@@ -7,6 +7,7 @@ import CartDrawer from './components/CartDrawer';
 import Profile from './pages/Profile';
 import Restaurants from './pages/Restaurants';
 import BottomNav from './components/BottomNav';
+import Checkout from './pages/Checkout';
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               <Route path="/restaurants" element={<Restaurants />} />
               <Route path="/restaurant/:id" element={<RestaurantMenu />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/checkout" element={<Checkout />} />
               {/* Add other routes here later */}
             </Routes>
           </main>

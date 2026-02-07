@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin } from 'lucide-react';
 import RestaurantCard from '../components/RestaurantCard';
@@ -23,9 +24,11 @@ const Home = () => {
               Taste the <span className="text-accent">Future</span> of <br/> Food Delivery
             </h1>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-white text-primary px-8 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
-                Order Now <ArrowRight size={20} />
-              </button>
+              <Link to="/restaurants">
+                <button className="bg-white text-primary px-8 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
+                  Order Now <ArrowRight size={20} />
+                </button>
+              </Link>
               <div className="glass bg-white/10 border-white/20 px-6 py-4 rounded-2xl flex items-center gap-3">
                 <div className="bg-white/20 p-2 rounded-full">
                   <MapPin size={20} />
