@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-50 text-slate-800 antialiased;
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  min-height: 100vh;
+}
+
+.glass {
+  @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-glass;
+}
+
+.glass-card {
+  @apply bg-white/40 backdrop-blur-md border border-white/50 shadow-sm hover:shadow-xl transition-all duration-300;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
