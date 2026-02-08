@@ -3,21 +3,34 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CreditCard, MapPin, Calendar, Lock, CheckCircle, ArrowLeft, ChevronRight, Wallet, Truck } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { useOrder } from '../context/OrderContext';
+import { useToast } from '../context/ToastContext';
 
 const Checkout = () => {
-  const { cartItems, cartTotal } = useCart();
+  const { cartItems, cartTotal, clearCart } = useCart();
+  const { placeOrder } = useOrder();
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const totalAmount = cartTotal + 2.99 + (cartTotal * 0.08);
 
   const handlePayment = (e) => {
     e.preventDefault();
     setIsProcessing(true);
     // Simulate payment processing
     setTimeout(() => {
+      placeOrder({
+        items: cartItems,
+        total: totalAmount,
+        restaurantName: "Multiple Restaurants", // Simplified for demo
+      });
+      clearCart();
       setIsProcessing(false);
       setIsSuccess(true);
+      showToast('Order placed successfully!');
       // Redirect after success
       setTimeout(() => navigate('/order-tracking'), 2000);
     }, 2000);
@@ -33,8 +46,6 @@ const Checkout = () => {
       </div>
     );
   }
-
-  const totalAmount = cartTotal + 2.99 + (cartTotal * 0.08);
 
   if (isSuccess) {
     return (
@@ -61,12 +72,12 @@ const Checkout = () => {
 
         <div className="flex items-center gap-4 mb-8">
           <h1 className="text-3xl font-bold text-slate-800">Checkout</h1>
-          <div className="flex items-center gap-2 text-sm font-medium text-slate-400 bg-white px-4 py-2 rounded-full shadow-sm">
-            <span className={step >= 1 ? "text-primary" : ""}>Address</span>
+          <div className="flex items-center gap-2 text-sm font-medium text-slate-400 bg-white/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/50">
+            <span className={step >= 1 ? "text-slate-900" : ""}>Address</span>
             <ChevronRight size={14} />
-            <span className={step >= 2 ? "text-primary" : ""}>Payment</span>
+            <span className={step >= 2 ? "text-slate-900" : ""}>Payment</span>
             <ChevronRight size={14} />
-            <span className={step >= 3 ? "text-primary" : ""}>Review</span>
+            <span className={step >= 3 ? "text-slate-900" : ""}>Review</span>
           </div>
         </div>
 
@@ -84,32 +95,32 @@ const Checkout = () => {
                 >
                   <div className="flex items-center gap-3 mb-6">
                     <div className="bg-primary/10 p-2 rounded-xl text-primary">
-                      <MapPin size={24} />
+                      <MapPin size={22} />
                     </div>
                     <h2 className="text-xl font-bold text-slate-800">Delivery Address</h2>
                   </div>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-500 ml-1">Street Address</label>
-                        <input type="text" placeholder="123 Main St" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-primary/50 transition-colors" />
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Street Address</label>
+                        <input type="text" placeholder="123 Main St" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-500 ml-1">City</label>
-                        <input type="text" placeholder="New York" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-primary/50 transition-colors" />
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">City</label>
+                        <input type="text" placeholder="New York" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                       </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-500 ml-1">State</label>
-                        <input type="text" placeholder="NY" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-primary/50 transition-colors" />
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">State</label>
+                        <input type="text" placeholder="NY" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-500 ml-1">ZIP Code</label>
-                        <input type="text" placeholder="10001" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-primary/50 transition-colors" />
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">ZIP Code</label>
+                        <input type="text" placeholder="10001" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                       </div>
                     </div>
-                    <button onClick={() => setStep(2)} className="w-full bg-slate-800 text-white py-4 rounded-2xl font-bold mt-4 hover:bg-slate-700 transition-colors">
+                    <button onClick={() => setStep(2)} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold mt-4 hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20">
                       Continue to Payment
                     </button>
                   </div>
@@ -126,7 +137,7 @@ const Checkout = () => {
                 >
                   <div className="flex items-center gap-3 mb-6">
                     <div className="bg-primary/10 p-2 rounded-xl text-primary">
-                      <CreditCard size={24} />
+                      <CreditCard size={22} />
                     </div>
                     <h2 className="text-xl font-bold text-slate-800">Payment Method</h2>
                   </div>
@@ -145,25 +156,25 @@ const Checkout = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-500 ml-1">Card Number</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Card Number</label>
                       <div className="relative">
-                        <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pl-12 outline-none focus:border-primary/50 transition-colors" />
+                        <input type="text" placeholder="0000 0000 0000 0000" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 pl-12 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                         <CreditCard size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                       </div>
                     </div>
                     
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-500 ml-1">Expiry Date</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Expiry Date</label>
                         <div className="relative">
-                          <input type="text" placeholder="MM/YY" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pl-12 outline-none focus:border-primary/50 transition-colors" />
+                          <input type="text" placeholder="MM/YY" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 pl-12 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                           <Calendar size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-500 ml-1">CVC</label>
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">CVC</label>
                         <div className="relative">
-                          <input type="text" placeholder="123" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pl-12 outline-none focus:border-primary/50 transition-colors" />
+                          <input type="text" placeholder="123" className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3.5 pl-12 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all" />
                           <Lock size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                         </div>
                       </div>
@@ -173,7 +184,7 @@ const Checkout = () => {
                       <button onClick={() => setStep(1)} className="flex-1 py-4 rounded-2xl font-bold text-slate-600 hover:bg-slate-100 transition-colors">
                         Back
                       </button>
-                      <button onClick={() => setStep(3)} className="flex-[2] bg-slate-800 text-white py-4 rounded-2xl font-bold hover:bg-slate-700 transition-colors">
+                      <button onClick={() => setStep(3)} className="flex-[2] bg-slate-900 text-white py-4 rounded-2xl font-bold hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20">
                         Review Order
                       </button>
                     </div>
@@ -191,7 +202,7 @@ const Checkout = () => {
                 >
                   <div className="flex items-center gap-3 mb-6">
                     <div className="bg-primary/10 p-2 rounded-xl text-primary">
-                      <CheckCircle size={24} />
+                      <CheckCircle size={22} />
                     </div>
                     <h2 className="text-xl font-bold text-slate-800">Review & Place Order</h2>
                   </div>

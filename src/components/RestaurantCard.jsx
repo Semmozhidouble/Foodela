@@ -13,12 +13,12 @@ const RestaurantCard = ({ data, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="glass-card rounded-3xl overflow-hidden group cursor-pointer hover:shadow-glow hover:border-primary/20"
+      className="glass-card rounded-[2rem] overflow-hidden group cursor-pointer hover:border-primary/20"
     >
       <div className="relative h-48 overflow-hidden">
         <motion.img 
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.6 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
           src={data.image} 
           alt={data.name} 
           className="w-full h-full object-cover"
@@ -33,7 +33,7 @@ const RestaurantCard = ({ data, index }) => {
               e.stopPropagation();
               const isAdding = !favorites.includes(data.id);
               toggleFavorite(data.id);
-              if (isAdding) {
+              if (isAdding) { 
                 showToast(`Added ${data.name} to favorites`, 'success');
               } else {
                 showToast(`Removed ${data.name} from favorites`, 'info');
@@ -41,7 +41,7 @@ const RestaurantCard = ({ data, index }) => {
             }}
             className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-colors"
           >
-            <Heart size={18} className={favorites.includes(data.id) ? "fill-primary text-primary" : "text-slate-400"} />
+            <Heart size={18} className={favorites.includes(data.id) ? "fill-primary text-primary" : "text-slate-400 hover:text-primary transition-colors"} />
           </motion.button>
         </div>
         {data.offer && (
@@ -54,7 +54,7 @@ const RestaurantCard = ({ data, index }) => {
       
       <div className="p-5">
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-lg font-bold text-slate-800">{data.name}</h3>
+          <h3 className="text-lg font-bold text-slate-800 group-hover:text-primary transition-colors">{data.name}</h3>
           <div className="flex items-center gap-1 bg-green-50 px-2 py-0.5 rounded-lg">
             <Star size={14} className="fill-green-500 text-green-500" />
             <span className="text-sm font-bold text-green-700">{data.rating}</span>

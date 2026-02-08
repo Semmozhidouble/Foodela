@@ -1,33 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Mail, Phone, MapPin, Package, Edit2, Save, Camera, LogOut } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Package, Edit2, Save, Camera, LogOut, RotateCcw, Home, Briefcase, Trash2, Plus, ChevronDown, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
-// Mock data for order history
-const mockOrderHistory = [
-  {
-    id: "ORD-2024-001",
-    restaurantName: "Sushi Master",
-    date: "Feb 24, 2024",
-    status: "Delivered",
-    total: 42.50,
-    items: "Volcano Roll, Miso Soup, Green Tea",
-    image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=200&q=80"
-  },
-  {
-    id: "ORD-2024-002",
-    restaurantName: "Burger Lab",
-    date: "Feb 20, 2024",
-    status: "Delivered",
-    total: 28.90,
-    items: "Classic Burger, Fries, Coke",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80"
-  }
-];
+import { useOrder } from '../context/OrderContext';
+import { useCart } from '../context/CartContext';
+import EmptyState from '../components/EmptyState';
 
 const Profile = () => {
   const { user, logout } = useAuth();
+  const { orderHistory } = useOrder();
+  const { reorderItems } = useCart();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
@@ -37,6 +20,27 @@ const Profile = () => {
     phone: '+1 (555) 012-3456',
     address: '123 Innovation Dr, Tech City'
   });
+  import { Link } from 'react-router-dom';
+  
+  const [addresses, setAddresses] = useState([
+    { id: 1, type: 'Home', value: '123 Innovation Dr, Tech City, TC 90210' },
+    { id: 2, type: 'Work', value: '456 Corporate Blvd, Business Park, BP 12345' }
+  ]);
+  const [newAddress, setNewAddress] = useState({ type: 'Home', value: '' });
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
+
+  const handleAddAddress = (e) => {
+    e.preventDefault();
+    if (newAddress.value) {
+      setAddresses([...addresses, { id: Date.now(), ...newAddress }]);
+      setNewAddress({ type: 'Home', value: '' });
+      setIsAddingAddress(false);
+    }
+  };
+
+  const removeAddress = (id) => {
+    setAddresses(addresses.filter(addr => addr.id !== id));
+  };
 
   const handleLogout = () => {
     logout();
@@ -46,6 +50,95 @@ const Profile = () => {
   const handleSave = () => {
     setIsEditing(false);
     // Update user context or backend here
+  };
+
+  const OrderCard = ({ order }) => {
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    return (
+      <motion.div 
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-card rounded-3xl overflow-hidden border border-white/50"
+      >
+        <div 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="p-5 flex items-center gap-4 cursor-pointer hover:bg-white/40 transition-colors"
+        >
+          <div className="w-16 h-16 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0">
+             <img 
+               src={order.items && order.items[0] ? order.items[0].image : "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&q=80"} 
+               alt={order.restaurantName} 
+               className="w-full h-full object-cover" 
+             />
+          </div>
+          <div className="flex-1">
+            <div className="flex justify-between items-start">
+              <h3 className="font-bold text-slate-800 text-lg">{order.restaurantName}</h3>
+              <span className="font-bold text-slate-800">${order.total.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between items-center mt-1">
+              <p className="text-xs text-slate-500">
+                {new Date(order.timestamp).toLocaleDateString()} • {order.items ? order.items.length : 0} Items
+              </p>
+              <motion.div 
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-slate-400"
+              >
+                <ChevronDown size={20} />
+              </motion.div>
+            </div>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <div className="px-5 pb-5 pt-0 border-t border-slate-100/50">
+                <div className="py-4 space-y-3">
+                  {order.items && order.items.map((item, i) => (
+                    <div key={i} className="flex justify-between text-sm text-slate-600">
+                      <span className="flex items-center gap-2">
+                        <span className="bg-slate-100 text-slate-600 w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold">
+                          {item.quantity}
+                        </span>
+                        {item.name}
+                      </span>
+                      <span>${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex justify-between items-center pt-4 border-t border-slate-100/50">
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    order.statusStep === 3 ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {order.statusStep === 3 ? 'Delivered' : 'In Progress'}
+                  </span>
+                  
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      reorderItems(order.items);
+                    }}
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-xl font-bold text-sm shadow-glow hover:bg-primary/90 transition-all"
+                  >
+                    <RotateCcw size={16} /> Reorder
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
   };
 
   if (!user) return null;
@@ -75,11 +168,11 @@ const Profile = () => {
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <div className="bg-white/60 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold text-slate-700 shadow-sm">
               <Package size={18} className="text-primary" />
-              {mockOrderHistory.length} Orders
+              {orderHistory.length} Orders
             </div>
             <div className="bg-white/60 px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-bold text-slate-700 shadow-sm">
               <MapPin size={18} className="text-primary" />
-              Saved Addresses
+              {addresses.length} Saved Addresses
             </div>
           </div>
         </div>
@@ -102,7 +195,18 @@ const Profile = () => {
               <Package size={20} /> Order History
             </button>
             
+            <button 
+              onClick={() => setActiveTab('addresses')} 
+              className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-medium ${activeTab === 'addresses' ? 'bg-primary text-white shadow-glow' : 'text-slate-600 hover:bg-slate-100'}`}
+            >
+              <MapPin size={20} /> Saved Addresses
+            </button>
+
             <div className="h-px bg-slate-200 my-2 mx-4"></div>
+
+            <Link to="/settings" className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-medium text-slate-600 hover:bg-slate-100">
+              <Settings size={20} /> Settings
+            </Link>
             
             <button 
               onClick={handleLogout}
@@ -116,7 +220,7 @@ const Profile = () => {
         {/* Content */}
         <div className="lg:col-span-2">
           <AnimatePresence mode="wait">
-            {activeTab === 'profile' ? (
+            {activeTab === 'profile' && (
               <motion.div 
                 key="profile" 
                 initial={{ opacity: 0, x: 20 }} 
@@ -176,24 +280,101 @@ const Profile = () => {
                   </div>
                 </div>
               </motion.div>
-            ) : (
+            )}
+            
+            {activeTab === 'orders' && (
               <motion.div key="orders" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
-                {mockOrderHistory.map((order, i) => (
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} key={order.id} className="glass-card p-5 rounded-3xl flex flex-col sm:flex-row gap-5 items-center">
-                    <img src={order.image} alt={order.restaurantName} className="w-20 h-20 rounded-2xl object-cover" />
-                    <div className="flex-1 w-full text-center sm:text-left">
-                      <div className="flex flex-col sm:flex-row justify-between items-center mb-1">
-                        <h3 className="font-bold text-slate-800 text-lg">{order.restaurantName}</h3>
-                        <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">{order.status}</span>
+                {orderHistory.length === 0 ? (
+                  <EmptyState 
+                    icon={Package}
+                    title="No past orders"
+                    description="You haven't placed any orders yet."
+                  />
+                ) : (
+                  orderHistory.map((order, i) => (
+                    <OrderCard key={order.id} order={order} />
+                  ))
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'addresses' && (
+              <motion.div 
+                key="addresses" 
+                initial={{ opacity: 0, x: 20 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                exit={{ opacity: 0, x: -20 }} 
+                className="space-y-4"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold text-slate-800">My Addresses</h2>
+                  <button 
+                    onClick={() => setIsAddingAddress(!isAddingAddress)} 
+                    className="flex items-center gap-1 text-primary font-bold text-sm hover:underline"
+                  >
+                    {isAddingAddress ? 'Cancel' : <><Plus size={16} /> Add New</>}
+                  </button>
+                </div>
+
+                {isAddingAddress && (
+                  <motion.form 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    onSubmit={handleAddAddress}
+                    className="glass p-6 rounded-3xl mb-6"
+                  >
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-sm font-medium text-slate-500 ml-1">Label</label>
+                        <select 
+                          value={newAddress.type}
+                          onChange={(e) => setNewAddress({...newAddress, type: e.target.value})}
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-primary/50"
+                        >
+                          <option>Home</option>
+                          <option>Work</option>
+                          <option>Other</option>
+                        </select>
                       </div>
-                      <p className="text-slate-500 text-sm mb-2">{order.items}</p>
-                      <div className="flex justify-between items-center border-t border-slate-100 pt-3 mt-2">
-                        <span className="text-xs font-medium text-slate-400">{order.date}</span>
-                        <span className="font-bold text-slate-800">${order.total.toFixed(2)}</span>
+                      <div>
+                        <label className="text-sm font-medium text-slate-500 ml-1">Address</label>
+                        <input 
+                          type="text" 
+                          value={newAddress.value}
+                          onChange={(e) => setNewAddress({...newAddress, value: e.target.value})}
+                          placeholder="Enter full address"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-primary/50"
+                          required
+                        />
                       </div>
+                      <button className="w-full bg-slate-800 text-white py-3 rounded-xl font-bold hover:bg-slate-700 transition-colors">
+                        Save Address
+                      </button>
                     </div>
-                  </motion.div>
-                ))}
+                  </motion.form>
+                )}
+
+                <div className="grid gap-4">
+                  {addresses.map(addr => (
+                    <div key={addr.id} className="glass p-5 rounded-3xl flex justify-between items-center group">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-primary/10 p-3 rounded-full text-primary">
+                          {addr.type === 'Home' ? <Home size={20} /> : addr.type === 'Work' ? <Briefcase size={20} /> : <MapPin size={20} />}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-slate-800">{addr.type}</h3>
+                          <p className="text-slate-500 text-sm">{addr.value}</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => removeAddress(addr.id)}
+                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

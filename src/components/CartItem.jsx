@@ -2,9 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Minus, Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 
 const CartItem = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart();
+  const { showToast } = useToast();
 
   return (
     <motion.div
@@ -22,7 +24,10 @@ const CartItem = ({ item }) => {
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-slate-800 text-lg">{item.name}</h3>
           <button 
-            onClick={() => removeFromCart(item.id)}
+            onClick={() => {
+              removeFromCart(item.id);
+              showToast('Item removed from cart', 'info');
+            }}
             className="text-slate-400 hover:text-red-500 transition-colors p-1"
           >
             <Trash2 size={18} />

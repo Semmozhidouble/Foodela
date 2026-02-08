@@ -13,19 +13,19 @@ const Home = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-primary rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden shadow-glow"
+          className="bg-primary rounded-[3rem] p-8 md:p-16 text-white relative overflow-hidden shadow-glow"
         >
           <div className="relative z-10 max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full mb-6 border border-white/20">
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
               <span className="text-sm font-medium">Fastest Delivery in Town</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight">
               Taste the <span className="text-accent">Future</span> of <br/> Food Delivery
             </h1>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/restaurants">
-                <button className="bg-white text-primary px-8 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2">
+                <button className="bg-white text-primary px-8 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-black/10">
                   Order Now <ArrowRight size={20} />
                 </button>
               </Link>
@@ -42,8 +42,16 @@ const Home = () => {
           </div>
           
           {/* Abstract Background Shapes */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
-          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-accent/20 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"></div>
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+            className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"
+          />
+          <motion.div 
+            animate={{ rotate: -360 }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/20 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"
+          />
         </motion.div>
       </section>
 
@@ -59,7 +67,7 @@ const Home = () => {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="min-w-[100px] h-[120px] glass-card rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white transition-colors"
+              className="min-w-[100px] h-[120px] glass-card rounded-[2rem] flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white transition-colors"
             >
               <span className="text-4xl">{cat.icon}</span>
               <span className="font-medium text-slate-600">{cat.name}</span>

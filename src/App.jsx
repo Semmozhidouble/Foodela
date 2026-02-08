@@ -13,11 +13,13 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Settings from './pages/Settings';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
+import { OrderProvider } from './context/OrderContext';
 import Layout from './components/Layout';
 import PageTransition from './components/PageTransition';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -41,6 +43,7 @@ function AppContent() {
           <Route path="/signup" element={<PageTransition><Signup /></PageTransition>} />
           <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
           <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+          <Route path="/settings" element={<ProtectedRoute><PageTransition><Settings /></PageTransition></ProtectedRoute>} />
         </Routes>
       </AnimatePresence>
     </Layout>
@@ -54,9 +57,11 @@ function App() {
         <FavoritesProvider>
           <CartProvider>
             <AuthProvider>
-              <Router>
-                <AppContent />
-              </Router>
+              <OrderProvider>
+                <Router>
+                  <AppContent />
+                </Router>
+              </OrderProvider>
             </AuthProvider>
           </CartProvider>
         </FavoritesProvider>

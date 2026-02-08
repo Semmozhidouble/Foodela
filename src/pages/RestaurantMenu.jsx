@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, Star, Clock, MapPin, Search } from 'lucide-react';
 import { restaurants, menuItems } from '../data/mockData';
 import FoodItemCard from '../components/FoodItemCard';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 const RestaurantMenu = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { scrollY } = useScroll();
+  const [loading, setLoading] = useState(true);
   
   // Parallax effects
   const imageY = useTransform(scrollY, [0, 300], [0, 100]);
@@ -20,7 +22,22 @@ const RestaurantMenu = () => {
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
+    const timer = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(timer);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pb-24 pt-24 px-6 max-w-7xl mx-auto">
+        <div className="h-[40vh] bg-slate-200 rounded-[2.5rem] animate-pulse mb-8"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map(i => (
+            <SkeletonLoader key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pb-24">

@@ -3,23 +3,12 @@ import { motion } from 'framer-motion';
 import { Clock, MapPin, Phone, MessageSquare, CheckCircle, ChefHat, Truck, Package } from 'lucide-react';
 import OrderTracker from '../components/OrderTracker';
 import { useNavigate } from 'react-router-dom';
+import { useOrder } from '../context/OrderContext';
 
 const OrderTracking = () => {
-  const [statusStep, setStatusStep] = useState(0);
+  const { activeOrder } = useOrder();
   const navigate = useNavigate();
-
-  // Simulation of order progress
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setStatusStep((prev) => {
-        if (prev < 3) return prev + 1;
-        clearInterval(timer);
-        return prev;
-      });
-    }, 4000); // Change status every 4 seconds for demo
-
-    return () => clearInterval(timer);
-  }, []);
+  const statusStep = activeOrder?.statusStep || 0;
 
   const getStatusInfo = (step) => {
     switch (step) {
@@ -33,6 +22,17 @@ const OrderTracking = () => {
 
   const currentStatus = getStatusInfo(statusStep);
   const StatusIcon = currentStatus.icon;
+
+  if (!activeOrder) {
+    return (
+      <div className="min-h-screen pt-24 px-6 flex flex-col items-center justify-center text-center">
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">No Active Orders</h2>
+        <button onClick={() => navigate('/')} className="text-primary font-medium hover:underline">
+          Back to Home
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-24 px-6 bg-slate-50">
@@ -118,20 +118,18 @@ const OrderTracking = () => {
           <div className="space-y-4">
             <div className="flex justify-between items-start border-b border-slate-100 pb-4">
               <div>
-                <h3 className="font-bold text-slate-800">Sushi Master</h3>
-                <p className="text-sm text-slate-500">Order #245892</p>
+                <h3 className="font-bold text-slate-800">{activeOrder.restaurantName || "Restaurant"}</h3>
+                <p className="text-sm text-slate-500">Order #{activeOrder.id.slice(-6)}</p>
               </div>
-              <span className="text-sm font-bold text-slate-800">$48.50</span>
+              <span className="text-sm font-bold text-slate-800">${activeOrder.total.toFixed(2)}</span>
             </div>
             <div className="space-y-2">
-              <div className="flex justify-between text-sm text-slate-600">
-                <span>2x Volcano Roll</span>
-                <span>$37.00</span>
-              </div>
-              <div className="flex justify-between text-sm text-slate-600">
-                <span>1x Miso Soup</span>
-                <span>$5.50</span>
-              </div>
+              {activeOrder.items && activeOrder.items.map((item, i) => (
+                <div key={i} className="flex justify-between text-sm text-slate-600">
+                  <span>{item.quantity}x {item.name}</span>
+                  <span>${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
             </div>
             <div className="pt-2 flex items-start gap-3">
               <MapPin size={18} className="text-primary mt-0.5" />

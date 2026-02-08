@@ -4,6 +4,7 @@ import { ArrowLeft, ShoppingBag, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CartItem from '../components/CartItem';
+import EmptyState from '../components/EmptyState';
 
 const Cart = () => {
   const { cartItems, cartTotal } = useCart();
@@ -11,15 +12,14 @@ const Cart = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen pt-24 pb-20 px-6 flex flex-col items-center justify-center text-center">
-        <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-          <ShoppingBag size={40} className="text-slate-300" />
-        </div>
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">Your cart is empty</h2>
-        <p className="text-slate-500 mb-8">Looks like you haven't added anything yet.</p>
-        <Link to="/restaurants" className="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-glow hover:bg-primary/90 transition-all">
-          Start Ordering
-        </Link>
+      <div className="min-h-screen pt-24 pb-20 px-6">
+        <EmptyState 
+          icon={ShoppingBag}
+          title="Your cart is empty"
+          description="Looks like you haven't added anything yet."
+          actionText="Start Ordering"
+          actionLink="/restaurants"
+        />
       </div>
     );
   }

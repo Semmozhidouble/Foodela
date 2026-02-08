@@ -2,21 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
 
 const FoodItemCard = ({ item, index }) => {
   const { addToCart } = useCart();
+  const { showToast } = useToast();
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="glass-card p-4 rounded-3xl flex gap-4 items-center group relative overflow-hidden"
+      className="glass-card p-4 rounded-[2rem] flex gap-4 items-center group relative overflow-hidden"
     >
       {/* Image */}
       <div className="w-28 h-28 flex-shrink-0 rounded-2xl overflow-hidden relative">
         <motion.img
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.5 }}
           src={item.image}
           alt={item.name}
           className="w-full h-full object-cover"
@@ -38,7 +41,13 @@ const FoodItemCard = ({ item, index }) => {
         <div className="flex justify-between items-center">
           <span className="font-bold text-lg text-slate-800">${item.price.toFixed(2)}</span>
           
-          <motion.button onClick={() => addToCart(item)} whileTap={{ scale: 0.9 }} className="bg-slate-800 text-white p-2 rounded-xl hover:bg-primary transition-colors shadow-lg shadow-slate-200">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+            addToCart(item);
+            showToast(`Added ${item.name} to cart`);
+          }} className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-primary transition-colors shadow-lg shadow-slate-200/50">
             <Plus size={20} />
           </motion.button>
         </div>

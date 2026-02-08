@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -27,6 +29,7 @@ const Login = () => {
           email: formData.email,
           avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=800&q=80'
         });
+        showToast('Welcome back!');
         navigate('/');
       } else {
         setError('Please enter valid credentials');
@@ -36,12 +39,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-12 px-4 flex items-center justify-center">
-      <div className="w-full max-w-5xl bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-2xl overflow-hidden flex min-h-[600px] border border-white/50">
+      <div className="w-full max-w-5xl bg-white/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl overflow-hidden flex min-h-[650px] border border-white/60">
         
         {/* Left Side - Branding (Desktop) */}
-        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-slate-900 to-slate-800 relative items-center justify-center p-12 text-white overflow-hidden">
-          <div className="absolute inset-0 bg-primary/20 mix-blend-overlay"></div>
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80')] bg-cover bg-center opacity-20"></div>
+        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-orange-500 to-red-600 relative items-center justify-center p-12 text-white overflow-hidden">
+          <div className="absolute inset-0 bg-black/10 mix-blend-overlay"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
           
           <div className="relative z-10 max-w-md">
             <motion.div 
@@ -50,7 +53,7 @@ const Login = () => {
               transition={{ delay: 0.2 }}
             >
               <h1 className="text-5xl font-bold mb-6">Welcome Back</h1>
-              <p className="text-slate-300 text-lg leading-relaxed">
+              <p className="text-white/90 text-lg leading-relaxed font-medium">
                 Access your premium food delivery experience. Your favorite meals are just a click away.
               </p>
             </motion.div>
@@ -58,7 +61,7 @@ const Login = () => {
         </div>
 
         {/* Right Side - Form */}
-        <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative">
+        <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center relative bg-white/40">
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -74,11 +77,11 @@ const Login = () => {
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="peer w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 pl-11 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder-transparent"
+                  className="peer w-full bg-white/50 border border-slate-200 rounded-xl px-4 py-4 pl-11 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder-transparent text-slate-800"
                   placeholder="Email Address"
                 />
-                <label htmlFor="email" className="absolute left-11 -top-2.5 bg-white px-1 text-xs text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary">Email Address</label>
-                <Mail size={18} className="absolute left-4 top-4 text-slate-400 peer-focus:text-primary transition-colors" />
+                <label htmlFor="email" className="absolute left-11 -top-2.5 bg-transparent px-1 text-xs text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary font-medium">Email Address</label>
+                <Mail size={20} className="absolute left-4 top-4 text-slate-400 peer-focus:text-primary transition-colors" />
               </div>
 
               <div className="relative">
@@ -87,17 +90,28 @@ const Login = () => {
                   id="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="peer w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 pl-11 pr-12 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder-transparent"
+                  className="peer w-full bg-white/50 border border-slate-200 rounded-xl px-4 py-4 pl-11 pr-12 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder-transparent text-slate-800"
                   placeholder="Password"
                 />
-                <label htmlFor="password" className="absolute left-11 -top-2.5 bg-white px-1 text-xs text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3.5 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary">Password</label>
-                <Lock size={18} className="absolute left-4 top-4 text-slate-400 peer-focus:text-primary transition-colors" />
+                <label htmlFor="password" className="absolute left-11 -top-2.5 bg-transparent px-1 text-xs text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-primary font-medium">Password</label>
+                <Lock size={20} className="absolute left-4 top-4 text-slate-400 peer-focus:text-primary transition-colors" />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-4 text-slate-400 hover:text-slate-600">
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
 
-              {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
+              <AnimatePresence mode="wait">
+                {error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-red-500 text-sm font-medium ml-1"
+                  >
+                    {error}
+                  </motion.p>
+                )}
+              </AnimatePresence>
 
               <div className="flex justify-end">
                 <Link to="/forgot-password" className="text-sm font-medium text-primary hover:text-primary/80">Forgot Password?</Link>

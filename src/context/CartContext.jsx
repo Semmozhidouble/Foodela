@@ -1,10 +1,17 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem('cartItems');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const addToCart = (item) => {
     setCartItems(prev => {
@@ -31,10 +38,30 @@ export const CartProvider = ({ children }) => {
     }));
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const reorderItems = (itemsToReorder) => {
+    setCartItems(prev => {
+      const newCart = [...prev];
+      itemsToReorder.forEach(item => {
+        const existingIndex = newCart.findIndex(i => i.id === item.id);
+        if (existingIndex > -1) {
+          newCart[existingIndex] = { ...newCart[existingIndex], quantity: newCart[existingIndex].quantity + item.quantity };
+        } else {
+          newCart.push({ ...item });
+        }
+      });
+      return newCart;
+    });
+    setIsCartOpen(true);
+  };
+
   const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
   return (
-    <CartContext.Provider value={{ cartItems, isCartOpen, setIsCartOpen, addToCart, removeFromCart, updateQuantity, cartTotal }}>
+    <CartContext.Provider value={{ cartItems, isCartOpen, setIsCartOpen, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, reorderItems }}>
       {children}
     </CartContext.Provider>
   );
