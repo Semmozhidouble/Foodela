@@ -90,7 +90,8 @@ export const OrderProvider = ({ children }) => {
 
   return (
     <OrderContext.Provider value={{ 
-      activeOrder, 
+      activeOrder,
+      setActiveOrder,
       orderHistory, 
       placeOrder,
       fetchOrderHistory,

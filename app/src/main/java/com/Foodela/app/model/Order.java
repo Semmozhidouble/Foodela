@@ -45,6 +45,16 @@ public class Order {
     private String deliveryAddress;
     private String deliveryInstructions;
     private Integer estimatedDeliveryTime; // in minutes
+    
+    // Delivery partner information
+    private String deliveryPartnerName;
+    private String deliveryPartnerPhone;
+    private String deliveryPartnerPhoto;
+    private LocalDateTime acceptedAt;
+    private LocalDateTime preparingAt;
+    private LocalDateTime readyAt;
+    private LocalDateTime outForDeliveryAt;
+    private LocalDateTime deliveredAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -94,6 +104,22 @@ public class Order {
     public void setDeliveryInstructions(String deliveryInstructions) { this.deliveryInstructions = deliveryInstructions; }
     public Integer getEstimatedDeliveryTime() { return estimatedDeliveryTime; }
     public void setEstimatedDeliveryTime(Integer estimatedDeliveryTime) { this.estimatedDeliveryTime = estimatedDeliveryTime; }
+    public String getDeliveryPartnerName() { return deliveryPartnerName; }
+    public void setDeliveryPartnerName(String deliveryPartnerName) { this.deliveryPartnerName = deliveryPartnerName; }
+    public String getDeliveryPartnerPhone() { return deliveryPartnerPhone; }
+    public void setDeliveryPartnerPhone(String deliveryPartnerPhone) { this.deliveryPartnerPhone = deliveryPartnerPhone; }
+    public String getDeliveryPartnerPhoto() { return deliveryPartnerPhoto; }
+    public void setDeliveryPartnerPhoto(String deliveryPartnerPhoto) { this.deliveryPartnerPhoto = deliveryPartnerPhoto; }
+    public LocalDateTime getAcceptedAt() { return acceptedAt; }
+    public void setAcceptedAt(LocalDateTime acceptedAt) { this.acceptedAt = acceptedAt; }
+    public LocalDateTime getPreparingAt() { return preparingAt; }
+    public void setPreparingAt(LocalDateTime preparingAt) { this.preparingAt = preparingAt; }
+    public LocalDateTime getReadyAt() { return readyAt; }
+    public void setReadyAt(LocalDateTime readyAt) { this.readyAt = readyAt; }
+    public LocalDateTime getOutForDeliveryAt() { return outForDeliveryAt; }
+    public void setOutForDeliveryAt(LocalDateTime outForDeliveryAt) { this.outForDeliveryAt = outForDeliveryAt; }
+    public LocalDateTime getDeliveredAt() { return deliveredAt; }
+    public void setDeliveredAt(LocalDateTime deliveredAt) { this.deliveredAt = deliveredAt; }
     public List<OrderItem> getOrderItems() { return orderItems; }
     public void setOrderItems(List<OrderItem> orderItems) { this.orderItems = orderItems; }
     public LocalDateTime getCreatedAt() { return createdAt; }

@@ -17,15 +17,18 @@ public class OrderService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
+    private final OrderSimulationService orderSimulationService;
 
     public OrderService(OrderRepository orderRepository, 
                         UserRepository userRepository,
                         RestaurantRepository restaurantRepository,
-                        MenuItemRepository menuItemRepository) {
+                        MenuItemRepository menuItemRepository,
+                        OrderSimulationService orderSimulationService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
         this.menuItemRepository = menuItemRepository;
+        this.orderSimulationService = orderSimulationService;
     }
 
     @Transactional
@@ -86,6 +89,10 @@ public class OrderService {
         order.setTotalAmount(totalAmount + restaurant.getDeliveryFee() + taxAmount);
 
         Order savedOrder = orderRepository.save(order);
+        
+        // Start order simulation for real-time updates
+        orderSimulationService.simulateOrderProgress(savedOrder.getId());
+        
         return OrderDTO.fromOrder(savedOrder);
     }
 
