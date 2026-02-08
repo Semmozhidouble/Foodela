@@ -2,7 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const EmptyState = ({ icon: Icon, title, description, actionText, actionLink }) => {
+const EmptyState = ({ icon: Icon, title, description, actionText, actionLink, onAction }) => {
+  const handleAction = (e) => {
+    if (onAction) {
+      e.preventDefault();
+      onAction();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <motion.div 
@@ -40,7 +47,11 @@ const EmptyState = ({ icon: Icon, title, description, actionText, actionLink }) 
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <Link to={actionLink} className="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-glow hover:bg-primary/90 transition-all hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+          <Link 
+            to={actionLink} 
+            onClick={handleAction}
+            className="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-glow hover:bg-primary/90 transition-all hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+          >
             {actionText}
           </Link>
         </motion.div>

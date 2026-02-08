@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import RestaurantCard from '../components/RestaurantCard';
 import SearchBar from '../components/SearchBar';
 import FilterPanel from '../components/FilterPanel';
+import CategoryFilter from '../components/CategoryFilter';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { restaurantAPI } from '../services/apiService';
 import EmptyState from '../components/EmptyState';
@@ -12,6 +13,7 @@ import EmptyState from '../components/EmptyState';
 const Restaurants = () => {
   const [loading, setLoading] = useState(true);
   const [restaurants, setRestaurants] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('all');
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
@@ -31,10 +33,15 @@ const Restaurants = () => {
     fetchRestaurants();
   }, []);
 
-  const filteredRestaurants = restaurants.filter(restaurant => 
-    restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    restaurant.cuisine?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredRestaurants = restaurants.filter(restaurant => {
+    const matchesSearch = restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          restaurant.cuisine?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = activeCategory === 'all' || 
+                            restaurant.cuisine?.toLowerCase().includes(activeCategory.toLowerCase());
+
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen pt-24 pb-24 px-6 relative overflow-hidden">
@@ -68,13 +75,18 @@ const Restaurants = () => {
           <SearchBar />
         </motion.div>
 
-        {/* Filters & Sort */}
+        {/* Categories & Filters */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="sticky top-24 z-30 mb-8"
+          className="sticky top-24 z-30 mb-8 space-y-4"
         >
+          <CategoryFilter 
+            activeCategory={activeCategory} 
+            onSelectCategory={setActiveCategory} 
+          />
+          
           <div className="glass p-2 rounded-2xl shadow-sm">
             <FilterPanel />
           </div>

@@ -39,7 +39,14 @@ const CartItem = ({ item }) => {
           <div className="flex items-center gap-3 bg-white rounded-xl p-1 border border-slate-100 shadow-sm">
             <motion.button 
               whileTap={{ scale: 0.9 }}
-              onClick={() => updateQuantity(item.id, -1)}
+              onClick={() => {
+                if (item.quantity > 1) {
+                  updateQuantity(item.id, item.quantity - 1);
+                } else {
+                  removeFromCart(item.id);
+                  showToast('Item removed from cart', 'info');
+                }
+              }}
               className="p-2 hover:bg-slate-50 rounded-lg transition-colors text-slate-600"
             >
               <Minus size={16} />
@@ -47,7 +54,7 @@ const CartItem = ({ item }) => {
             <span className="font-bold text-slate-800 w-6 text-center">{item.quantity}</span>
             <motion.button 
               whileTap={{ scale: 0.9 }}
-              onClick={() => updateQuantity(item.id, 1)}
+              onClick={() => updateQuantity(item.id, item.quantity + 1)}
               className="p-2 hover:bg-slate-50 rounded-lg transition-colors text-slate-600"
             >
               <Plus size={16} />

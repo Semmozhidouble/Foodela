@@ -2,12 +2,16 @@ package com.Foodela.app.config;
 
 import com.Foodela.app.model.MenuItem;
 import com.Foodela.app.model.Restaurant;
+import com.Foodela.app.model.User;
 import com.Foodela.app.repository.MenuItemRepository;
 import com.Foodela.app.repository.RestaurantRepository;
+import com.Foodela.app.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Configuration
@@ -15,8 +19,23 @@ public class DataSeeder {
 
     @Bean
     CommandLineRunner initDatabase(RestaurantRepository restaurantRepository, 
-                                    MenuItemRepository menuItemRepository) {
+                                    MenuItemRepository menuItemRepository,
+                                    UserRepository userRepository,
+                                    PasswordEncoder passwordEncoder) {
         return args -> {
+            // Create test user if not exists
+            if (userRepository.findByEmail("test@foodela.com").isEmpty()) {
+                User testUser = new User();
+                testUser.setEmail("test@foodela.com");
+                testUser.setPassword(passwordEncoder.encode("test123"));
+                testUser.setName("Test User");
+                testUser.setCreatedAt(LocalDateTime.now());
+                testUser.setUpdatedAt(LocalDateTime.now());
+                
+                userRepository.save(testUser);
+                System.out.println("✅ Test user created: test@foodela.com / test123");
+            }
+            
             // Only seed if database is empty
             if (restaurantRepository.count() == 0) {
                 // Create Restaurants

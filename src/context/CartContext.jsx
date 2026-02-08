@@ -3,65 +3,98 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('cartItems');
-    return savedCart ? JSON.parse(savedCart) : [];
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : { items: [], restaurantId: null, restaurantName: null };
   });
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item) => {
-    setCartItems(prev => {
-      const existing = prev.find(i => i.id === item.id);
+    setCart(prev => {
+      // If adding from a different restaurant, warn (but this is handled in component)
+      const newRestaurantId = item.restaurantId || prev.restaurantId;
+      const newRestaurantName = item.restaurantName || prev.restaurantName;
+      
+      const existing = prev.items.find(i => i.id === item.id);
       if (existing) {
-        return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i);
+        return {
+          ...prev,
+          items: prev.items.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i)
+        };
       }
-      return [...prev, { ...item, quantity: 1 }];
+      return {
+        items: [...prev.items, { ...item, quantity: 1 }],
+        restaurantId: newRestaurantId,
+        restaurantName: newRestaurantName
+      };
     });
     setIsCartOpen(true);
   };
 
   const removeFromCart = (id) => {
-    setCartItems(prev => prev.filter(i => i.id !== id));
+    setCart(prev => {
+      const updatedItems = prev.items.filter(i => i.id !== id);
+      return {
+        items: updatedItems,
+        restaurantId: updatedItems.length > 0 ? prev.restaurantId : null,
+        restaurantName: updatedItems.length > 0 ? prev.restaurantName : null
+      };
+    });
   };
 
-  const updateQuantity = (id, delta) => {
-    setCartItems(prev => prev.map(i => {
-      if (i.id === id) {
-        const newQty = i.quantity + delta;
-        return newQty > 0 ? { ...i, quantity: newQty } : i;
-      }
-      return i;
+  const updateQuantity = (id, newQuantity) => {
+    setCart(prev => ({
+      ...prev,
+      items: prev.items.map(i => i.id === id ? { ...i, quantity: newQuantity } : i)
     }));
   };
 
   const clearCart = () => {
-    setCartItems([]);
+    setCart({ items: [], restaurantId: null, restaurantName: null });
   };
 
   const reorderItems = (itemsToReorder) => {
-    setCartItems(prev => {
-      const newCart = [...prev];
+    setCart(prev => {
+      const newItems = [...prev.items];
       itemsToReorder.forEach(item => {
-        const existingIndex = newCart.findIndex(i => i.id === item.id);
+        const existingIndex = newItems.findIndex(i => i.id === item.id);
         if (existingIndex > -1) {
-          newCart[existingIndex] = { ...newCart[existingIndex], quantity: newCart[existingIndex].quantity + item.quantity };
+          newItems[existingIndex] = { ...newItems[existingIndex], quantity: newItems[existingIndex].quantity + item.quantity };
         } else {
-          newCart.push({ ...item });
+          newItems.push({ ...item });
         }
       });
-      return newCart;
+      return {
+        items: newItems,
+        restaurantId: prev.restaurantId || itemsToReorder[0]?.restaurantId,
+        restaurantName: prev.restaurantName || itemsToReorder[0]?.restaurantName
+      };
     });
     setIsCartOpen(true);
   };
 
-  const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const cartTotal = cart.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+  
+  // Legacy support - expose cartItems for backward compatibility
+  const cartItems = cart.items;
 
   return (
-    <CartContext.Provider value={{ cartItems, isCartOpen, setIsCartOpen, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, reorderItems }}>
+    <CartContext.Provider value={{ 
+      cart, 
+      cartItems, 
+      isCartOpen, 
+      setIsCartOpen, 
+      addToCart, 
+      removeFromCart, 
+      updateQuantity, 
+      clearCart, 
+      cartTotal, 
+      reorderItems 
+    }}>
       {children}
     </CartContext.Provider>
   );

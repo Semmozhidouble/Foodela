@@ -17,15 +17,18 @@ public class OrderService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final MenuItemRepository menuItemRepository;
+    private final OrderSimulationService orderSimulationService;
 
     public OrderService(OrderRepository orderRepository, 
                         UserRepository userRepository,
                         RestaurantRepository restaurantRepository,
-                        MenuItemRepository menuItemRepository) {
+                        MenuItemRepository menuItemRepository,
+                        OrderSimulationService orderSimulationService) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
         this.menuItemRepository = menuItemRepository;
+        this.orderSimulationService = orderSimulationService;
     }
 
     @Transactional
@@ -40,8 +43,26 @@ public class OrderService {
         order.setUser(user);
         order.setRestaurant(restaurant);
         order.setDeliveryAddress(request.getDeliveryAddress());
+        order.setDeliveryInstructions(request.getDeliveryInstructions());
         order.setDeliveryFee(restaurant.getDeliveryFee());
         order.setStatus(Order.OrderStatus.PLACED);
+        
+        // Set payment method
+        if (request.getPaymentMethod() != null) {
+            order.setPaymentMethod(Order.PaymentMethod.valueOf(request.getPaymentMethod()));
+            // For COD, payment is pending; for online, assume completed
+            if (request.getPaymentMethod().equals("COD")) {
+                order.setPaymentStatus(Order.PaymentStatus.PENDING);
+            } else {
+                order.setPaymentStatus(Order.PaymentStatus.COMPLETED);
+            }
+        } else {
+            order.setPaymentMethod(Order.PaymentMethod.COD);
+            order.setPaymentStatus(Order.PaymentStatus.PENDING);
+        }
+        
+        // Set estimated delivery time (30-45 minutes)
+        order.setEstimatedDeliveryTime(35);
 
         double totalAmount = 0.0;
 
@@ -60,10 +81,18 @@ public class OrderService {
             totalAmount += menuItem.getPrice() * itemReq.getQuantity();
         }
 
-        // Calculate total with delivery fee
-        order.setTotalAmount(totalAmount + restaurant.getDeliveryFee());
+        // Calculate tax (8%)
+        double taxAmount = totalAmount * 0.08;
+        order.setTaxAmount(taxAmount);
+        
+        // Calculate total with delivery fee and tax
+        order.setTotalAmount(totalAmount + restaurant.getDeliveryFee() + taxAmount);
 
         Order savedOrder = orderRepository.save(order);
+        
+        // Start order simulation for real-time updates
+        orderSimulationService.simulateOrderProgress(savedOrder.getId());
+        
         return OrderDTO.fromOrder(savedOrder);
     }
 

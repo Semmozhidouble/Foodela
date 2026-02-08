@@ -1,5 +1,6 @@
 package com.Foodela.app.controller;
 
+import com.Foodela.app.dto.MenuCategoryDTO;
 import com.Foodela.app.dto.MenuItemDTO;
 import com.Foodela.app.dto.RestaurantDTO;
 import com.Foodela.app.service.RestaurantService;
@@ -39,6 +40,16 @@ public class RestaurantController {
         try {
             List<MenuItemDTO> menuItems = restaurantService.getRestaurantMenu(id);
             return ResponseEntity.ok(menuItems);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/{id}/menu/categories")
+    public ResponseEntity<List<MenuCategoryDTO>> getRestaurantMenuByCategories(@PathVariable Long id) {
+        try {
+            List<MenuCategoryDTO> categories = restaurantService.getRestaurantMenuByCategory(id);
+            return ResponseEntity.ok(categories);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
