@@ -2,9 +2,11 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const CartDrawer = () => {
   const { isCartOpen, setIsCartOpen, cartItems, updateQuantity, removeFromCart, cartTotal } = useCart();
+  const navigate = useNavigate();
 
   return (
     <AnimatePresence>
@@ -83,13 +85,30 @@ const CartDrawer = () => {
                     <span>Total</span><span>${(cartTotal + 2.99).toFixed(2)}</span>
                   </div>
                 </div>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-glow flex items-center justify-center gap-2"
-                >
-                  Checkout <ArrowRight size={20} />
-                </motion.button>
+                <div className="flex gap-3">
+                  <motion.button
+                    onClick={() => {
+                      setIsCartOpen(false);
+                      navigate('/cart');
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex-1 bg-slate-100 text-slate-700 py-4 rounded-2xl font-bold text-lg hover:bg-slate-200 transition-colors"
+                  >
+                    View Cart
+                  </motion.button>
+                  <motion.button
+                    onClick={() => {
+                      setIsCartOpen(false);
+                      navigate('/checkout');
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex-[2] bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-glow flex items-center justify-center gap-2"
+                  >
+                    Checkout <ArrowRight size={20} />
+                  </motion.button>
+                </div>
               </div>
             )}
           </motion.div>

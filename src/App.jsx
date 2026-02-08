@@ -1,38 +1,66 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import Home from './pages/Home';
 import RestaurantMenu from './pages/RestaurantMenu';
-import CartDrawer from './components/CartDrawer';
 import Profile from './pages/Profile';
 import Restaurants from './pages/Restaurants';
-import BottomNav from './components/BottomNav';
 import Checkout from './pages/Checkout';
+import Cart from './pages/Cart';
+import OrderTracking from './pages/OrderTracking';
+import Favorites from './pages/Favorites';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { CartProvider } from './context/CartContext';
+import { FavoritesProvider } from './context/FavoritesContext';
+import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { AuthProvider } from './context/AuthContext';
+import Layout from './components/Layout';
+import PageTransition from './components/PageTransition';
+import ProtectedRoute from './components/ProtectedRoute';
+
+function AppContent() {
+  const location = useLocation();
+
+  return (
+    <Layout>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/restaurants" element={<PageTransition><Restaurants /></PageTransition>} />
+          <Route path="/restaurant/:id" element={<PageTransition><RestaurantMenu /></PageTransition>} />
+          <Route path="/profile" element={<ProtectedRoute><PageTransition><Profile /></PageTransition></ProtectedRoute>} />
+          <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+          <Route path="/checkout" element={<ProtectedRoute><PageTransition><Checkout /></PageTransition></ProtectedRoute>} />
+          <Route path="/favorites" element={<PageTransition><Favorites /></PageTransition>} />
+          <Route path="/order-tracking" element={<PageTransition><OrderTracking /></PageTransition>} />
+          <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+          <Route path="/signup" element={<PageTransition><Signup /></PageTransition>} />
+          <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
+          <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+        </Routes>
+      </AnimatePresence>
+    </Layout>
+  );
+}
 
 function App() {
   return (
     <ThemeProvider>
-      <CartProvider>
-        <Router>
-          <div className="min-h-screen">
-            <Navbar />
-            <CartDrawer />
-            <BottomNav />
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/restaurants" element={<Restaurants />} />
-                <Route path="/restaurant/:id" element={<RestaurantMenu />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/checkout" element={<Checkout />} />
-                {/* Add other routes here later */}
-              </Routes>
-            </main>
-          </div>
-        </Router>
-      </CartProvider>
+      <ToastProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <AuthProvider>
+              <Router>
+                <AppContent />
+              </Router>
+            </AuthProvider>
+          </CartProvider>
+        </FavoritesProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

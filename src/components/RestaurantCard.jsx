@@ -1,8 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Star, Clock, Tag } from 'lucide-react';
+import { Star, Clock, Tag, Heart } from 'lucide-react';
+import { useFavorites } from '../context/FavoritesContext';
+import { useToast } from '../context/ToastContext';
 
 const RestaurantCard = ({ data, index }) => {
+  const { favorites, toggleFavorite } = useFavorites();
+  const { showToast } = useToast();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -18,8 +23,26 @@ const RestaurantCard = ({ data, index }) => {
           alt={data.name} 
           className="w-full h-full object-cover"
         />
-        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-          <span className="text-xs font-bold text-slate-800">{data.time}</span>
+        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+          <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+            <span className="text-xs font-bold text-slate-800">{data.time}</span>
+          </div>
+          <motion.button 
+            whileTap={{ scale: 0.8 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              const isAdding = !favorites.includes(data.id);
+              toggleFavorite(data.id);
+              if (isAdding) {
+                showToast(`Added ${data.name} to favorites`, 'success');
+              } else {
+                showToast(`Removed ${data.name} from favorites`, 'info');
+              }
+            }}
+            className="p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-colors"
+          >
+            <Heart size={18} className={favorites.includes(data.id) ? "fill-primary text-primary" : "text-slate-400"} />
+          </motion.button>
         </div>
         {data.offer && (
           <div className="absolute bottom-4 left-4 bg-primary/90 backdrop-blur-sm px-3 py-1 rounded-xl flex items-center gap-1 shadow-lg shadow-primary/20">
