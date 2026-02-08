@@ -37,8 +37,8 @@ function AppContent() {
           <Route path="/restaurants" element={<PageTransition><Restaurants /></PageTransition>} />
           <Route path="/restaurant/:id" element={<PageTransition><RestaurantMenu /></PageTransition>} />
           <Route path="/profile" element={<ProtectedRoute><PageTransition><Profile /></PageTransition></ProtectedRoute>} />
-          <Route path="/cart" element={<ProtectedRoute><PageTransition><Cart /></PageTransition></ProtectedRoute>} />
-          <Route path="/checkout" element={<ProtectedRoute><PageTransition><Checkout /></PageTransition></ProtectedRoute>} />
+          <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+          <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
           <Route path="/favorites" element={<PageTransition><Favorites /></PageTransition>} />
           <Route path="/order-tracking" element={<ProtectedRoute><PageTransition><OrderTracking /></PageTransition></ProtectedRoute>} />
           <Route path="/login" element={<PageTransition><Login /></PageTransition>} />

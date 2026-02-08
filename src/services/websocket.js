@@ -23,7 +23,7 @@ class WebSocketService {
         if (onConnect) onConnect();
       },
       onDisconnect: () => {
-        console.log('❌ WebSocket Disconnected');
+        // Silent disconnect - only log if debugging needed
       },
       onStompError: (frame) => {
         console.error('WebSocket Error:', frame);

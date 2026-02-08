@@ -12,8 +12,13 @@ public class OrderDTO {
     private String restaurantName;
     private Double totalAmount;
     private Double deliveryFee;
+    private Double taxAmount;
     private String status;
+    private String paymentMethod;
+    private String paymentStatus;
     private String deliveryAddress;
+    private String deliveryInstructions;
+    private Integer estimatedDeliveryTime;
     private List<OrderItemDTO> items;
     private LocalDateTime createdAt;
 
@@ -45,15 +50,21 @@ public class OrderDTO {
     public OrderDTO() {}
 
     public OrderDTO(Long id, Long restaurantId, String restaurantName, Double totalAmount,
-                    Double deliveryFee, String status, String deliveryAddress,
-                    List<OrderItemDTO> items, LocalDateTime createdAt) {
+                    Double deliveryFee, Double taxAmount, String status, String paymentMethod, 
+                    String paymentStatus, String deliveryAddress, String deliveryInstructions,
+                    Integer estimatedDeliveryTime, List<OrderItemDTO> items, LocalDateTime createdAt) {
         this.id = id;
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.totalAmount = totalAmount;
         this.deliveryFee = deliveryFee;
+        this.taxAmount = taxAmount;
         this.status = status;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
         this.deliveryAddress = deliveryAddress;
+        this.deliveryInstructions = deliveryInstructions;
+        this.estimatedDeliveryTime = estimatedDeliveryTime;
         this.items = items;
         this.createdAt = createdAt;
     }
@@ -74,8 +85,13 @@ public class OrderDTO {
             order.getRestaurant().getName(),
             order.getTotalAmount(),
             order.getDeliveryFee(),
+            order.getTaxAmount(),
             order.getStatus().toString(),
+            order.getPaymentMethod() != null ? order.getPaymentMethod().toString() : null,
+            order.getPaymentStatus() != null ? order.getPaymentStatus().toString() : null,
             order.getDeliveryAddress(),
+            order.getDeliveryInstructions(),
+            order.getEstimatedDeliveryTime(),
             itemDTOs,
             order.getCreatedAt()
         );
@@ -91,10 +107,20 @@ public class OrderDTO {
     public void setTotalAmount(Double totalAmount) { this.totalAmount = totalAmount; }
     public Double getDeliveryFee() { return deliveryFee; }
     public void setDeliveryFee(Double deliveryFee) { this.deliveryFee = deliveryFee; }
+    public Double getTaxAmount() { return taxAmount; }
+    public void setTaxAmount(Double taxAmount) { this.taxAmount = taxAmount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public String getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
     public String getDeliveryAddress() { return deliveryAddress; }
     public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }
+    public String getDeliveryInstructions() { return deliveryInstructions; }
+    public void setDeliveryInstructions(String deliveryInstructions) { this.deliveryInstructions = deliveryInstructions; }
+    public Integer getEstimatedDeliveryTime() { return estimatedDeliveryTime; }
+    public void setEstimatedDeliveryTime(Integer estimatedDeliveryTime) { this.estimatedDeliveryTime = estimatedDeliveryTime; }
     public List<OrderItemDTO> getItems() { return items; }
     public void setItems(List<OrderItemDTO> items) { this.items = items; }
     public LocalDateTime getCreatedAt() { return createdAt; }

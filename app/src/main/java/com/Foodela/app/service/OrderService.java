@@ -40,8 +40,26 @@ public class OrderService {
         order.setUser(user);
         order.setRestaurant(restaurant);
         order.setDeliveryAddress(request.getDeliveryAddress());
+        order.setDeliveryInstructions(request.getDeliveryInstructions());
         order.setDeliveryFee(restaurant.getDeliveryFee());
         order.setStatus(Order.OrderStatus.PLACED);
+        
+        // Set payment method
+        if (request.getPaymentMethod() != null) {
+            order.setPaymentMethod(Order.PaymentMethod.valueOf(request.getPaymentMethod()));
+            // For COD, payment is pending; for online, assume completed
+            if (request.getPaymentMethod().equals("COD")) {
+                order.setPaymentStatus(Order.PaymentStatus.PENDING);
+            } else {
+                order.setPaymentStatus(Order.PaymentStatus.COMPLETED);
+            }
+        } else {
+            order.setPaymentMethod(Order.PaymentMethod.COD);
+            order.setPaymentStatus(Order.PaymentStatus.PENDING);
+        }
+        
+        // Set estimated delivery time (30-45 minutes)
+        order.setEstimatedDeliveryTime(35);
 
         double totalAmount = 0.0;
 
@@ -60,8 +78,12 @@ public class OrderService {
             totalAmount += menuItem.getPrice() * itemReq.getQuantity();
         }
 
-        // Calculate total with delivery fee
-        order.setTotalAmount(totalAmount + restaurant.getDeliveryFee());
+        // Calculate tax (8%)
+        double taxAmount = totalAmount * 0.08;
+        order.setTaxAmount(taxAmount);
+        
+        // Calculate total with delivery fee and tax
+        order.setTotalAmount(totalAmount + restaurant.getDeliveryFee() + taxAmount);
 
         Order savedOrder = orderRepository.save(order);
         return OrderDTO.fromOrder(savedOrder);
