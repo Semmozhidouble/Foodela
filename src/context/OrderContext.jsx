@@ -1,51 +1,101 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import websocketService from '../services/websocket';
+import { orderAPI } from '../services/apiService';
+import { useAuth } from './AuthContext';
 
 const OrderContext = createContext();
 
+const statusSteps = {
+  'PLACED': 0,
+  'CONFIRMED': 1,
+  'PREPARING': 2,
+  'OUT_FOR_DELIVERY': 3,
+  'DELIVERED': 4
+};
+
 export const OrderProvider = ({ children }) => {
-  const [activeOrder, setActiveOrder] = useState(() => {
-    const saved = localStorage.getItem('activeOrder');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const { isAuthenticated } = useAuth();
+  const [activeOrder, setActiveOrder] = useState(null);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [isConnected, setIsConnected] = useState(false);
 
-  const [orderHistory, setOrderHistory] = useState(() => {
-    const saved = localStorage.getItem('orderHistory');
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  // Connect WebSocket when user is authenticated
   useEffect(() => {
-    if (activeOrder) {
-      localStorage.setItem('activeOrder', JSON.stringify(activeOrder));
+    if (isAuthenticated) {
+      websocketService.connect(() => {
+        setIsConnected(true);
+      });
+
+      return () => {
+        websocketService.disconnect();
+        setIsConnected(false);
+      };
     }
-  }, [activeOrder]);
+  }, [isAuthenticated]);
 
+  // Subscribe to active order updates
   useEffect(() => {
-    localStorage.setItem('orderHistory', JSON.stringify(orderHistory));
-  }, [orderHistory]);
+    if (activeOrder && isConnected) {
+      websocketService.subscribeToOrder(activeOrder.id, (update) => {
+        console.log('📬 Order update received:', update);
+        
+        setActiveOrder(prev => ({
+          ...prev,
+          status: update.status,
+          statusStep: statusSteps[update.status] || prev.statusStep,
+          lastUpdate: update.timestamp,
+          message: update.message
+        }));
+      });
 
-  // Simulate real-time updates
-  useEffect(() => {
-    if (activeOrder && activeOrder.statusStep < 3) {
-      const timer = setTimeout(() => {
-        setActiveOrder(prev => ({ ...prev, statusStep: prev.statusStep + 1 }));
-      }, 5000); // Advance status every 5 seconds
-      return () => clearTimeout(timer);
+      return () => {
+        websocketService.unsubscribeFromOrder(activeOrder.id);
+      };
     }
-  }, [activeOrder]);
+  }, [activeOrder, isConnected]);
 
-  const placeOrder = (orderDetails) => {
-    const newOrder = {
-      id: `ORD-${Date.now()}`,
-      ...orderDetails,
-      statusStep: 0,
-      timestamp: new Date().toISOString(),
-    };
-    setActiveOrder(newOrder);
-    setOrderHistory(prev => [newOrder, ...prev]);
+  const placeOrder = async (orderDetails) => {
+    try {
+      const response = await orderAPI.create(orderDetails);
+      
+      const newOrder = {
+        ...response,
+        statusStep: statusSteps[response.status] || 0,
+        message: 'Order placed successfully'
+      };
+      
+      setActiveOrder(newOrder);
+      setOrderHistory(prev => [newOrder, ...prev]);
+      
+      return { success: true, order: newOrder };
+    } catch (error) {
+      console.error('Failed to place order:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+  const fetchOrderHistory = async () => {
+    try {
+      const orders = await orderAPI.getMyOrders();
+      setOrderHistory(orders);
+    } catch (error) {
+      console.error('Failed to fetch order history:', error);
+    }
+  };
+
+  const clearActiveOrder = () => {
+    setActiveOrder(null);
   };
 
   return (
-    <OrderContext.Provider value={{ activeOrder, orderHistory, placeOrder }}>
+    <OrderContext.Provider value={{ 
+      activeOrder, 
+      orderHistory, 
+      placeOrder,
+      fetchOrderHistory,
+      clearActiveOrder,
+      isConnected
+    }}>
       {children}
     </OrderContext.Provider>
   );

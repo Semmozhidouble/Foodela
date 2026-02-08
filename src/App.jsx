@@ -14,6 +14,7 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Settings from './pages/Settings';
+import Test from './pages/Test';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { ToastProvider } from './context/ToastContext';
@@ -23,6 +24,7 @@ import { OrderProvider } from './context/OrderContext';
 import Layout from './components/Layout';
 import PageTransition from './components/PageTransition';
 import ProtectedRoute from './components/ProtectedRoute';
+import ApiTest from './components/ApiTest';
 
 function AppContent() {
   const location = useLocation();
@@ -35,15 +37,17 @@ function AppContent() {
           <Route path="/restaurants" element={<PageTransition><Restaurants /></PageTransition>} />
           <Route path="/restaurant/:id" element={<PageTransition><RestaurantMenu /></PageTransition>} />
           <Route path="/profile" element={<ProtectedRoute><PageTransition><Profile /></PageTransition></ProtectedRoute>} />
-          <Route path="/cart" element={<PageTransition><Cart /></PageTransition>} />
+          <Route path="/cart" element={<ProtectedRoute><PageTransition><Cart /></PageTransition></ProtectedRoute>} />
           <Route path="/checkout" element={<ProtectedRoute><PageTransition><Checkout /></PageTransition></ProtectedRoute>} />
           <Route path="/favorites" element={<PageTransition><Favorites /></PageTransition>} />
-          <Route path="/order-tracking" element={<PageTransition><OrderTracking /></PageTransition>} />
+          <Route path="/order-tracking" element={<ProtectedRoute><PageTransition><OrderTracking /></PageTransition></ProtectedRoute>} />
           <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
           <Route path="/signup" element={<PageTransition><Signup /></PageTransition>} />
           <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
           <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
           <Route path="/settings" element={<ProtectedRoute><PageTransition><Settings /></PageTransition></ProtectedRoute>} />
+          <Route path="/api-test" element={<ApiTest />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </AnimatePresence>
     </Layout>

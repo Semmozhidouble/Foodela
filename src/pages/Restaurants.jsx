@@ -1,27 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Search } from 'lucide-react';
 import RestaurantCard from '../components/RestaurantCard';
 import SearchBar from '../components/SearchBar';
 import FilterPanel from '../components/FilterPanel';
 import SkeletonLoader from '../components/SkeletonLoader';
-import { restaurants } from '../data/mockData';
+import { restaurantAPI } from '../services/apiService';
+import EmptyState from '../components/EmptyState';
 
 const Restaurants = () => {
   const [loading, setLoading] = useState(true);
+  const [restaurants, setRestaurants] = useState([]);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        setLoading(true);
+        const data = await restaurantAPI.getAll();
+        setRestaurants(data);
+      } catch (error) {
+        console.error('Failed to fetch restaurants:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
   const filteredRestaurants = restaurants.filter(restaurant => 
     restaurant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    restaurant.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    restaurant.cuisine?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    // Simulate network delay for skeleton demo
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div className="min-h-screen pt-24 pb-24 px-6 relative overflow-hidden">
@@ -81,6 +94,16 @@ const Restaurants = () => {
                 <SkeletonLoader />
               </motion.div>
             ))
+          ) : filteredRestaurants.length === 0 ? (
+            <div className="col-span-full">
+              <EmptyState 
+                icon={Search}
+                title="No restaurants found"
+                description={`We couldn't find any restaurants matching "${searchQuery}". Try a different term.`}
+                actionText="Clear Search"
+                actionLink="/restaurants"
+              />
+            </div>
           ) : (
             // Actual Data
             filteredRestaurants.map((restaurant, index) => (

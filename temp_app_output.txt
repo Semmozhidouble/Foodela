@@ -1,0 +1,319 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/App.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=7360cf6e"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+let prevRefreshReg;
+let prevRefreshSig;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  prevRefreshReg = window.$RefreshReg$;
+  prevRefreshSig = window.$RefreshSig$;
+  window.$RefreshReg$ = RefreshRuntime.getRefreshReg("C:/Users/semmo/Downloads/app/src/App.jsx");
+  window.$RefreshSig$ = RefreshRuntime.createSignatureFunctionForTransform;
+}
+var _s = $RefreshSig$();
+import __vite__cjsImport3_react from "/node_modules/.vite/deps/react.js?v=7360cf6e"; const React = __vite__cjsImport3_react.__esModule ? __vite__cjsImport3_react.default : __vite__cjsImport3_react;
+import { BrowserRouter as Router, Routes, Route, useLocation } from "/node_modules/.vite/deps/react-router-dom.js?v=b881fa4f";
+import { AnimatePresence } from "/node_modules/.vite/deps/framer-motion.js?v=beca3cf9";
+import Home from "/src/pages/Home.jsx";
+import RestaurantMenu from "/src/pages/RestaurantMenu.jsx";
+import Profile from "/src/pages/Profile.jsx";
+import Restaurants from "/src/pages/Restaurants.jsx";
+import Checkout from "/src/pages/Checkout.jsx";
+import Cart from "/src/pages/Cart.jsx";
+import OrderTracking from "/src/pages/OrderTracking.jsx";
+import Favorites from "/src/pages/Favorites.jsx";
+import Login from "/src/pages/Login.jsx";
+import Signup from "/src/pages/Signup.jsx";
+import ForgotPassword from "/src/pages/ForgotPassword.jsx";
+import ResetPassword from "/src/pages/ResetPassword.jsx";
+import Settings from "/src/pages/Settings.jsx";
+import { CartProvider } from "/src/context/CartContext.jsx";
+import { FavoritesProvider } from "/src/context/FavoritesContext.jsx";
+import { ToastProvider } from "/src/context/ToastContext.jsx";
+import { ThemeProvider } from "/src/context/ThemeContext.jsx";
+import { AuthProvider } from "/src/context/AuthContext.jsx";
+import { OrderProvider } from "/src/context/OrderContext.jsx";
+import Layout from "/src/components/Layout.jsx";
+import PageTransition from "/src/components/PageTransition.jsx";
+import ProtectedRoute from "/src/components/ProtectedRoute.jsx";
+import ApiTest from "/src/components/ApiTest.jsx";
+function AppContent() {
+  _s();
+  const location = useLocation();
+  return /* @__PURE__ */ jsxDEV(Layout, { children: /* @__PURE__ */ jsxDEV(AnimatePresence, { mode: "wait", children: /* @__PURE__ */ jsxDEV(Routes, { location, children: [
+    /* @__PURE__ */ jsxDEV(Route, { path: "/", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Home, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 54,
+      columnNumber: 52
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 54,
+      columnNumber: 36
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 54,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/restaurants", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Restaurants, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 55,
+      columnNumber: 63
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 55,
+      columnNumber: 47
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 55,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/restaurant/:id", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(RestaurantMenu, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 56,
+      columnNumber: 66
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 56,
+      columnNumber: 50
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 56,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/profile", element: /* @__PURE__ */ jsxDEV(ProtectedRoute, { children: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Profile, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 57,
+      columnNumber: 75
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 57,
+      columnNumber: 59
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 57,
+      columnNumber: 43
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 57,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/cart", element: /* @__PURE__ */ jsxDEV(ProtectedRoute, { children: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Cart, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 58,
+      columnNumber: 72
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 58,
+      columnNumber: 56
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 58,
+      columnNumber: 40
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 58,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/checkout", element: /* @__PURE__ */ jsxDEV(ProtectedRoute, { children: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Checkout, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 59,
+      columnNumber: 76
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 59,
+      columnNumber: 60
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 59,
+      columnNumber: 44
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 59,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/favorites", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Favorites, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 60,
+      columnNumber: 61
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 60,
+      columnNumber: 45
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 60,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/order-tracking", element: /* @__PURE__ */ jsxDEV(ProtectedRoute, { children: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(OrderTracking, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 61,
+      columnNumber: 82
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 61,
+      columnNumber: 66
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 61,
+      columnNumber: 50
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 61,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/login", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Login, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 62,
+      columnNumber: 57
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 62,
+      columnNumber: 41
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 62,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/signup", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Signup, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 63,
+      columnNumber: 58
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 63,
+      columnNumber: 42
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 63,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/forgot-password", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(ForgotPassword, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 64,
+      columnNumber: 67
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 64,
+      columnNumber: 51
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 64,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/reset-password", element: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(ResetPassword, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 65,
+      columnNumber: 66
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 65,
+      columnNumber: 50
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 65,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/settings", element: /* @__PURE__ */ jsxDEV(ProtectedRoute, { children: /* @__PURE__ */ jsxDEV(PageTransition, { children: /* @__PURE__ */ jsxDEV(Settings, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 66,
+      columnNumber: 76
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 66,
+      columnNumber: 60
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 66,
+      columnNumber: 44
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 66,
+      columnNumber: 11
+    }, this),
+    /* @__PURE__ */ jsxDEV(Route, { path: "/api-test", element: /* @__PURE__ */ jsxDEV(ApiTest, {}, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 67,
+      columnNumber: 44
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+      lineNumber: 67,
+      columnNumber: 11
+    }, this)
+  ] }, location.pathname, true, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 53,
+    columnNumber: 9
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 52,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 51,
+    columnNumber: 5
+  }, this);
+}
+_s(AppContent, "pkHmaVRPskBaU4tMJuJJpV42k1I=", false, function() {
+  return [useLocation];
+});
+_c = AppContent;
+function App() {
+  return /* @__PURE__ */ jsxDEV(ThemeProvider, { children: /* @__PURE__ */ jsxDEV(ToastProvider, { children: /* @__PURE__ */ jsxDEV(FavoritesProvider, { children: /* @__PURE__ */ jsxDEV(CartProvider, { children: /* @__PURE__ */ jsxDEV(AuthProvider, { children: /* @__PURE__ */ jsxDEV(OrderProvider, { children: /* @__PURE__ */ jsxDEV(Router, { children: /* @__PURE__ */ jsxDEV(AppContent, {}, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 83,
+    columnNumber: 19
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 82,
+    columnNumber: 17
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 81,
+    columnNumber: 15
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 80,
+    columnNumber: 13
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 79,
+    columnNumber: 11
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 78,
+    columnNumber: 9
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 77,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/semmo/Downloads/app/src/App.jsx",
+    lineNumber: 76,
+    columnNumber: 5
+  }, this);
+}
+_c2 = App;
+export default App;
+var _c, _c2;
+$RefreshReg$(_c, "AppContent");
+$RefreshReg$(_c2, "App");
+if (import.meta.hot && !inWebWorker) {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+if (import.meta.hot && !inWebWorker) {
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/semmo/Downloads/app/src/App.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/semmo/Downloads/app/src/App.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+
+//# sourceMappingURL=data:application/json;base64,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c2VMb2NhdGlvbiIsIkFuaW1hdGVQcmVzZW5jZSIsIkhvbWUiLCJSZXN0YXVyYW50TWVudSIsIlByb2ZpbGUiLCJSZXN0YXVyYW50cyIsIkNoZWNrb3V0IiwiQ2FydCIsIk9yZGVyVHJhY2tpbmciLCJGYXZvcml0ZXMiLCJMb2dpbiIsIlNpZ251cCIsIkZvcmdvdFBhc3N3b3JkIiwiUmVzZXRQYXNzd29yZCIsIlNldHRpbmdzIiwiQ2FydFByb3ZpZGVyIiwiRmF2b3JpdGVzUHJvdmlkZXIiLCJUb2FzdFByb3ZpZGVyIiwiVGhlbWVQcm92aWRlciIsIkF1dGhQcm92aWRlciIsIk9yZGVyUHJvdmlkZXIiLCJMYXlvdXQiLCJQYWdlVHJhbnNpdGlvbiIsIlByb3RlY3RlZFJvdXRlIiwiQXBpVGVzdCIsIkFwcENvbnRlbnQiLCJfcyIsImxvY2F0aW9uIiwicGF0aG5hbWUiLCJBcHAiLCJfYzIiLCJfYyJdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJBcHAuanN4Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyBCcm93c2VyUm91dGVyIGFzIFJvdXRlciwgUm91dGVzLCBSb3V0ZSwgdXNlTG9jYXRpb24gfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJztcbmltcG9ydCB7IEFuaW1hdGVQcmVzZW5jZSB9IGZyb20gJ2ZyYW1lci1tb3Rpb24nO1xuaW1wb3J0IEhvbWUgZnJvbSAnLi9wYWdlcy9Ib21lJztcbmltcG9ydCBSZXN0YXVyYW50TWVudSBmcm9tICcuL3BhZ2VzL1Jlc3RhdXJhbnRNZW51JztcbmltcG9ydCBQcm9maWxlIGZyb20gJy4vcGFnZXMvUHJvZmlsZSc7XG5pbXBvcnQgUmVzdGF1cmFudHMgZnJvbSAnLi9wYWdlcy9SZXN0YXVyYW50cyc7XG5pbXBvcnQgQ2hlY2tvdXQgZnJvbSAnLi9wYWdlcy9DaGVja291dCc7XG5pbXBvcnQgQ2FydCBmcm9tICcuL3BhZ2VzL0NhcnQnO1xuaW1wb3J0IE9yZGVyVHJhY2tpbmcgZnJvbSAnLi9wYWdlcy9PcmRlclRyYWNraW5nJztcbmltcG9ydCBGYXZvcml0ZXMgZnJvbSAnLi9wYWdlcy9GYXZvcml0ZXMnO1xuaW1wb3J0IExvZ2luIGZyb20gJy4vcGFnZXMvTG9naW4nO1xuaW1wb3J0IFNpZ251cCBmcm9tICcuL3BhZ2VzL1NpZ251cCc7XG5pbXBvcnQgRm9yZ290UGFzc3dvcmQgZnJvbSAnLi9wYWdlcy9Gb3Jnb3RQYXNzd29yZCc7XG5pbXBvcnQgUmVzZXRQYXNzd29yZCBmcm9tICcuL3BhZ2VzL1Jlc2V0UGFzc3dvcmQnO1xuaW1wb3J0IFNldHRpbmdzIGZyb20gJy4vcGFnZXMvU2V0dGluZ3MnO1xuaW1wb3J0IHsgQ2FydFByb3ZpZGVyIH0gZnJvbSAnLi9jb250ZXh0L0NhcnRDb250ZXh0JztcbmltcG9ydCB7IEZhdm9yaXRlc1Byb3ZpZGVyIH0gZnJvbSAnLi9jb250ZXh0L0Zhdm9yaXRlc0NvbnRleHQnO1xuaW1wb3J0IHsgVG9hc3RQcm92aWRlciB9IGZyb20gJy4vY29udGV4dC9Ub2FzdENvbnRleHQnO1xuaW1wb3J0IHsgVGhlbWVQcm92aWRlciB9IGZyb20gJy4vY29udGV4dC9UaGVtZUNvbnRleHQnO1xuaW1wb3J0IHsgQXV0aFByb3ZpZGVyIH0gZnJvbSAnLi9jb250ZXh0L0F1dGhDb250ZXh0JztcbmltcG9ydCB7IE9yZGVyUHJvdmlkZXIgfSBmcm9tICcuL2NvbnRleHQvT3JkZXJDb250ZXh0JztcbmltcG9ydCBMYXlvdXQgZnJvbSAnLi9jb21wb25lbnRzL0xheW91dCc7XG5pbXBvcnQgUGFnZVRyYW5zaXRpb24gZnJvbSAnLi9jb21wb25lbnRzL1BhZ2VUcmFuc2l0aW9uJztcbmltcG9ydCBQcm90ZWN0ZWRSb3V0ZSBmcm9tICcuL2NvbXBvbmVudHMvUHJvdGVjdGVkUm91dGUnO1xuaW1wb3J0IEFwaVRlc3QgZnJvbSAnLi9jb21wb25lbnRzL0FwaVRlc3QnO1xuXG5mdW5jdGlvbiBBcHBDb250ZW50KCkge1xuICBjb25zdCBsb2NhdGlvbiA9IHVzZUxvY2F0aW9uKCk7XG5cbiAgcmV0dXJuIChcbiAgICA8TGF5b3V0PlxuICAgICAgPEFuaW1hdGVQcmVzZW5jZSBtb2RlPVwid2FpdFwiPlxuICAgICAgICA8Um91dGVzIGxvY2F0aW9uPXtsb2NhdGlvbn0ga2V5PXtsb2NhdGlvbi5wYXRobmFtZX0+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvXCIgZWxlbWVudD17PFBhZ2VUcmFuc2l0aW9uPjxIb21lIC8+PC9QYWdlVHJhbnNpdGlvbj59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvcmVzdGF1cmFudHNcIiBlbGVtZW50PXs8UGFnZVRyYW5zaXRpb24+PFJlc3RhdXJhbnRzIC8+PC9QYWdlVHJhbnNpdGlvbj59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvcmVzdGF1cmFudC86aWRcIiBlbGVtZW50PXs8UGFnZVRyYW5zaXRpb24+PFJlc3RhdXJhbnRNZW51IC8+PC9QYWdlVHJhbnNpdGlvbj59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvcHJvZmlsZVwiIGVsZW1lbnQ9ezxQcm90ZWN0ZWRSb3V0ZT48UGFnZVRyYW5zaXRpb24+PFByb2ZpbGUgLz48L1BhZ2VUcmFuc2l0aW9uPjwvUHJvdGVjdGVkUm91dGU+fSAvPlxuICAgICAgICAgIDxSb3V0ZSBwYXRoPVwiL2NhcnRcIiBlbGVtZW50PXs8UHJvdGVjdGVkUm91dGU+PFBhZ2VUcmFuc2l0aW9uPjxDYXJ0IC8+PC9QYWdlVHJhbnNpdGlvbj48L1Byb3RlY3RlZFJvdXRlPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9jaGVja291dFwiIGVsZW1lbnQ9ezxQcm90ZWN0ZWRSb3V0ZT48UGFnZVRyYW5zaXRpb24+PENoZWNrb3V0IC8+PC9QYWdlVHJhbnNpdGlvbj48L1Byb3RlY3RlZFJvdXRlPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9mYXZvcml0ZXNcIiBlbGVtZW50PXs8UGFnZVRyYW5zaXRpb24+PEZhdm9yaXRlcyAvPjwvUGFnZVRyYW5zaXRpb24+fSAvPlxuICAgICAgICAgIDxSb3V0ZSBwYXRoPVwiL29yZGVyLXRyYWNraW5nXCIgZWxlbWVudD17PFByb3RlY3RlZFJvdXRlPjxQYWdlVHJhbnNpdGlvbj48T3JkZXJUcmFja2luZyAvPjwvUGFnZVRyYW5zaXRpb24+PC9Qcm90ZWN0ZWRSb3V0ZT59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvbG9naW5cIiBlbGVtZW50PXs8UGFnZVRyYW5zaXRpb24+PExvZ2luIC8+PC9QYWdlVHJhbnNpdGlvbj59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvc2lnbnVwXCIgZWxlbWVudD17PFBhZ2VUcmFuc2l0aW9uPjxTaWdudXAgLz48L1BhZ2VUcmFuc2l0aW9uPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9mb3Jnb3QtcGFzc3dvcmRcIiBlbGVtZW50PXs8UGFnZVRyYW5zaXRpb24+PEZvcmdvdFBhc3N3b3JkIC8+PC9QYWdlVHJhbnNpdGlvbj59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvcmVzZXQtcGFzc3dvcmRcIiBlbGVtZW50PXs8UGFnZVRyYW5zaXRpb24+PFJlc2V0UGFzc3dvcmQgLz48L1BhZ2VUcmFuc2l0aW9uPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9zZXR0aW5nc1wiIGVsZW1lbnQ9ezxQcm90ZWN0ZWRSb3V0ZT48UGFnZVRyYW5zaXRpb24+PFNldHRpbmdzIC8+PC9QYWdlVHJhbnNpdGlvbj48L1Byb3RlY3RlZFJvdXRlPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9hcGktdGVzdFwiIGVsZW1lbnQ9ezxBcGlUZXN0IC8+fSAvPlxuICAgICAgICA8L1JvdXRlcz5cbiAgICAgIDwvQW5pbWF0ZVByZXNlbmNlPlxuICAgIDwvTGF5b3V0PlxuICApO1xufVxuXG5mdW5jdGlvbiBBcHAoKSB7XG4gIHJldHVybiAoXG4gICAgPFRoZW1lUHJvdmlkZXI+XG4gICAgICA8VG9hc3RQcm92aWRlcj5cbiAgICAgICAgPEZhdm9yaXRlc1Byb3ZpZGVyPlxuICAgICAgICAgIDxDYXJ0UHJvdmlkZXI+XG4gICAgICAgICAgICA8QXV0aFByb3ZpZGVyPlxuICAgICAgICAgICAgICA8T3JkZXJQcm92aWRlcj5cbiAgICAgICAgICAgICAgICA8Um91dGVyPlxuICAgICAgICAgICAgICAgICAgPEFwcENvbnRlbnQgLz5cbiAgICAgICAgICAgICAgICA8L1JvdXRlcj5cbiAgICAgICAgICAgICAgPC9PcmRlclByb3ZpZGVyPlxuICAgICAgICAgICAgPC9BdXRoUHJvdmlkZXI+XG4gICAgICAgICAgPC9DYXJ0UHJvdmlkZXI+XG4gICAgICAgIDwvRmF2b3JpdGVzUHJvdmlkZXI+XG4gICAgICA8L1RvYXN0UHJvdmlkZXI+XG4gICAgPC9UaGVtZVByb3ZpZGVyPlxuICApO1xufVxuXG5leHBvcnQgZGVmYXVsdCBBcHA7Il0sImZpbGUiOiJDOi9Vc2Vycy9zZW1tby9Eb3dubG9hZHMvYXBwL3NyYy9BcHAuanN4In0=

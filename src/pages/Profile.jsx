@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Mail, Phone, MapPin, Package, Edit2, Save, Camera, LogOut, RotateCcw, Home, Briefcase, Trash2, Plus, ChevronDown, Settings } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useOrder } from '../context/OrderContext';
 import { useCart } from '../context/CartContext';
 import EmptyState from '../components/EmptyState';
@@ -20,7 +20,6 @@ const Profile = () => {
     phone: '+1 (555) 012-3456',
     address: '123 Innovation Dr, Tech City'
   });
-  import { Link } from 'react-router-dom';
   
   const [addresses, setAddresses] = useState([
     { id: 1, type: 'Home', value: '123 Innovation Dr, Tech City, TC 90210' },
@@ -42,8 +41,8 @@ const Profile = () => {
     setAddresses(addresses.filter(addr => addr.id !== id));
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate('/');
   };
 

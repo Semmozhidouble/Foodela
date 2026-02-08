@@ -8,6 +8,11 @@ const RestaurantCard = ({ data, index }) => {
   const { favorites, toggleFavorite } = useFavorites();
   const { showToast } = useToast();
 
+  // Format display data - handle both mock and API formats
+  const displayTime = data.deliveryTime ? `${data.deliveryTime} min` : (data.time || '30 min');
+  const displayTags = data.cuisine ? [data.cuisine] : (data.tags || []);
+  const displayFee = data.deliveryFee ? `$${data.deliveryFee.toFixed(2)}` : '$2.99';
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,7 +30,7 @@ const RestaurantCard = ({ data, index }) => {
         />
         <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
           <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-            <span className="text-xs font-bold text-slate-800">{data.time}</span>
+            <span className="text-xs font-bold text-slate-800">{displayTime}</span>
           </div>
           <motion.button 
             whileTap={{ scale: 0.8 }}
@@ -50,6 +55,11 @@ const RestaurantCard = ({ data, index }) => {
             <span className="text-xs font-bold text-white">{data.offer}</span>
           </div>
         )}
+        {!data.isOpen && data.isOpen !== undefined && (
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+            <span className="bg-white px-4 py-2 rounded-full font-bold text-slate-800">Closed</span>
+          </div>
+        )}
       </div>
       
       <div className="p-5">
@@ -60,11 +70,11 @@ const RestaurantCard = ({ data, index }) => {
             <span className="text-sm font-bold text-green-700">{data.rating}</span>
           </div>
         </div>
-        <p className="text-slate-500 text-sm mb-3">{data.tags.join(" • ")}</p>
+        <p className="text-slate-500 text-sm mb-3">{data.description || displayTags.join(" • ")}</p>
         <div className="flex items-center gap-2 text-sm text-slate-400">
-          <span>{data.priceRange}</span>
+          <span>{data.priceRange || '$$'}</span>
           <span>•</span>
-          <span>Delivery $2.99</span>
+          <span>Delivery {displayFee}</span>
         </div>
       </div>
     </motion.div>

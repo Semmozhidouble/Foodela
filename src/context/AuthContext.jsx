@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../services/apiService';
 
 const AuthContext = createContext();
 
@@ -7,27 +8,66 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check local storage for persisted user
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    // On app load, try to restore session from backend
+    const restoreSession = async () => {
+      try {
+        const userData = await authAPI.getMe();
+        setUser(userData);
+      } catch (error) {
+        console.log('No active session:', error.message);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Set a timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    restoreSession().finally(() => clearTimeout(timeout));
+
+    return () => clearTimeout(timeout);
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+  const login = async (credentials) => {
+    try {
+      const response = await authAPI.login(credentials);
+      setUser(response.user);
+      return { success: true, user: response.user };
+    } catch (error) {
+      const message = error.response?.data?.message || 'Login failed';
+      return { success: false, error: message };
+    }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
+  const register = async (userData) => {
+    try {
+      const response = await authAPI.register(userData);
+      return { success: true, message: response.message };
+    } catch (error) {
+      const message = error.response?.data?.message || 'Registration failed';
+      return { success: false, error: message };
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await authAPI.logout();
+      setUser(null);
+      return { success: true };
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still clear local state even if API call fails
+      setUser(null);
+      return { success: true };
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, login, register, logout, loading, isAuthenticated: !!user }}>
+      {children}
     </AuthContext.Provider>
   );
 };

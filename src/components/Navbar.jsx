@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingBag, User, Search, Menu, Heart, LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
@@ -9,6 +9,7 @@ const Navbar = () => {
   const { setIsCartOpen, cartItems } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e) => {
@@ -16,6 +17,8 @@ const Navbar = () => {
       navigate(`/restaurants?search=${encodeURIComponent(searchQuery)}`);
     }
   };
+
+  const isActive = (path) => location.pathname === path;
 
   return (
     <motion.nav 
@@ -36,8 +39,8 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-slate-500 font-medium hover:text-slate-900 transition-colors text-sm">Home</Link>
-          <Link to="/restaurants" className="text-slate-500 font-medium hover:text-slate-900 transition-colors text-sm">Restaurants</Link>
+          <Link to="/" className={`text-sm font-medium transition-colors ${isActive('/') ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>Home</Link>
+          <Link to="/restaurants" className={`text-sm font-medium transition-colors ${isActive('/restaurants') ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>Restaurants</Link>
         </div>
 
         {/* Search Bar - Desktop */}

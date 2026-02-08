@@ -4,6 +4,7 @@ import { Clock, MapPin, Phone, MessageSquare, CheckCircle, ChefHat, Truck, Packa
 import OrderTracker from '../components/OrderTracker';
 import { useNavigate } from 'react-router-dom';
 import { useOrder } from '../context/OrderContext';
+import EmptyState from '../components/EmptyState';
 
 const OrderTracking = () => {
   const { activeOrder } = useOrder();
@@ -25,11 +26,14 @@ const OrderTracking = () => {
 
   if (!activeOrder) {
     return (
-      <div className="min-h-screen pt-24 px-6 flex flex-col items-center justify-center text-center">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">No Active Orders</h2>
-        <button onClick={() => navigate('/')} className="text-primary font-medium hover:underline">
-          Back to Home
-        </button>
+      <div className="min-h-screen pt-24 px-6">
+        <EmptyState 
+          icon={Package}
+          title="No Active Orders"
+          description="You don't have any orders in progress right now."
+          actionText="Start Ordering"
+          actionLink="/restaurants"
+        />
       </div>
     );
   }

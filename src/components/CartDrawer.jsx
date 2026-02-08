@@ -46,9 +46,12 @@ const CartDrawer = () => {
             {/* Items List */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {cartItems.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-slate-400 gap-4">
-                  <ShoppingBag size={64} className="opacity-20" />
-                  <p>Your cart is empty</p>
+                <div className="h-full flex items-center justify-center">
+                  <EmptyState 
+                    icon={ShoppingBag}
+                    title="Your cart is empty"
+                    description="Add some delicious items to get started."
+                  />
                 </div>
               ) : (
                 cartItems.map(item => (

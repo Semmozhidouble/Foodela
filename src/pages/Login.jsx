@@ -14,27 +14,21 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      // Mock validation
-      if (formData.email && formData.password) {
-        login({
-          name: 'Demo User',
-          email: formData.email,
-          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=800&q=80'
-        });
-        showToast('Welcome back!');
-        navigate('/');
-      } else {
-        setError('Please enter valid credentials');
-      }
-    }, 1500);
+    const result = await login(formData);
+    
+    setIsLoading(false);
+    
+    if (result.success) {
+      showToast('Welcome back!');
+      navigate('/');
+    } else {
+      setError(result.error || 'Login failed');
+    }
   };
 
   return (

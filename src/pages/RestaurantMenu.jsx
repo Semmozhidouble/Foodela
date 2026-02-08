@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, Star, Clock, MapPin, Search } from 'lucide-react';
-import { restaurants, menuItems } from '../data/mockData';
+import { restaurantAPI } from '../services/apiService';
 import FoodItemCard from '../components/FoodItemCard';
 import SkeletonLoader from '../components/SkeletonLoader';
 
@@ -11,28 +11,42 @@ const RestaurantMenu = () => {
   const navigate = useNavigate();
   const { scrollY } = useScroll();
   const [loading, setLoading] = useState(true);
+  const [restaurant, setRestaurant] = useState(null);
+  const [menuItems, setMenuItems] = useState([]);
   
   // Parallax effects
   const imageY = useTransform(scrollY, [0, 300], [0, 100]);
   const headerOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
-  const restaurant = restaurants.find(r => r.id === parseInt(id)) || restaurants[0];
-  const items = menuItems.filter(item => item.restaurantId === parseInt(id) || item.restaurantId === 1); // Fallback to id 1 for demo
-
-  // Scroll to top on mount
+  // Fetch restaurant and menu data
   useEffect(() => {
-    window.scrollTo(0, 0);
-    const timer = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [restaurantData, menuData] = await Promise.all([
+          restaurantAPI.getById(id),
+          restaurantAPI.getMenu(id)
+        ]);
+        setRestaurant(restaurantData);
+        setMenuItems(menuData);
+      } catch (error) {
+        console.error('Failed to fetch restaurant data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (loading) {
+    window.scrollTo(0, 0);
+    fetchData();
+  }, [id]);
+
+  if (loading || !restaurant) {
     return (
       <div className="min-h-screen pb-24 pt-24 px-6 max-w-7xl mx-auto">
         <div className="h-[40vh] bg-slate-200 rounded-[2.5rem] animate-pulse mb-8"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[1, 2, 3, 4].map(i => (
-            <SkeletonLoader key={i} />
+            <SkeletonLoader key={i} type="list" />
           ))}
         </div>
       </div>
@@ -80,12 +94,12 @@ const RestaurantMenu = () => {
                   <Star size={14} className="fill-current" /> {restaurant.rating}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Clock size={16} /> {restaurant.time}
+                  <Clock size={16} /> {restaurant.deliveryTime} min
                 </span>
                 <span className="flex items-center gap-1">
-                  <MapPin size={16} /> 2.5 km away
+                  <MapPin size={16} /> {restaurant.address || 'Nearby'}
                 </span>
-                <span>{restaurant.tags.join(" • ")}</span>
+                <span>{restaurant.cuisine}</span>
               </div>
             </div>
             
@@ -109,7 +123,7 @@ const RestaurantMenu = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {items.map((item, index) => (
+          {menuItems.map((item, index) => (
             <FoodItemCard key={item.id} item={item} index={index} />
           ))}
         </div>

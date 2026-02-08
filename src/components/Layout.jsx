@@ -6,17 +6,19 @@ import CartDrawer from './CartDrawer';
 
 const Layout = ({ children }) => {
   const { pathname } = useLocation();
+  // Hide BottomNav on auth pages to reduce distraction
+  const isAuthPage = ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 md:pb-0">
+    <div className={`min-h-screen bg-slate-50 transition-colors duration-300 ${!isAuthPage ? 'pb-24 md:pb-0' : ''}`}>
       <Navbar />
       <CartDrawer />
-      <BottomNav />
-      <main className="relative min-h-[calc(100vh-80px)]">{children}</main>
+      {!isAuthPage && <BottomNav />}
+      <main className="relative w-full">{children}</main>
     </div>
   );
 };

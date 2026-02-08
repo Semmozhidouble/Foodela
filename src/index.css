@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-slate-50 text-slate-800 antialiased;
   background: linear-gradient(135deg, #f9fafb 0%, #f1f5f9 100%);
