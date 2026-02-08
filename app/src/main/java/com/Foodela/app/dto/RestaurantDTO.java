@@ -7,6 +7,7 @@ public class RestaurantDTO {
     private String name;
     private String description;
     private String cuisine;
+    private String restaurantType;
     private String image;
     private Double rating;
     private Integer deliveryTime;
@@ -16,12 +17,13 @@ public class RestaurantDTO {
 
     public RestaurantDTO() {}
 
-    public RestaurantDTO(Long id, String name, String description, String cuisine, String image,
+    public RestaurantDTO(Long id, String name, String description, String cuisine, String restaurantType, String image,
                          Double rating, Integer deliveryTime, Double deliveryFee, Boolean isOpen, String address) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.cuisine = cuisine;
+        this.restaurantType = restaurantType;
         this.image = image;
         this.rating = rating;
         this.deliveryTime = deliveryTime;
@@ -36,6 +38,7 @@ public class RestaurantDTO {
             restaurant.getName(),
             restaurant.getDescription(),
             restaurant.getCuisine(),
+            restaurant.getRestaurantType(),
             restaurant.getImage(),
             restaurant.getRating(),
             restaurant.getDeliveryTime(),
@@ -53,6 +56,8 @@ public class RestaurantDTO {
     public void setDescription(String description) { this.description = description; }
     public String getCuisine() { return cuisine; }
     public void setCuisine(String cuisine) { this.cuisine = cuisine; }
+    public String getRestaurantType() { return restaurantType; }
+    public void setRestaurantType(String restaurantType) { this.restaurantType = restaurantType; }
     public String getImage() { return image; }
     public void setImage(String image) { this.image = image; }
     public Double getRating() { return rating; }

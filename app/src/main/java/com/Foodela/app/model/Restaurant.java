@@ -23,6 +23,9 @@ public class Restaurant {
     private String description;
 
     private String cuisine;
+    
+    @Column(name = "restaurant_type")
+    private String restaurantType;
 
     private String image;
 
@@ -56,6 +59,8 @@ public class Restaurant {
     public void setDescription(String description) { this.description = description; }
     public String getCuisine() { return cuisine; }
     public void setCuisine(String cuisine) { this.cuisine = cuisine; }
+    public String getRestaurantType() { return restaurantType; }
+    public void setRestaurantType(String restaurantType) { this.restaurantType = restaurantType; }
     public String getImage() { return image; }
     public void setImage(String image) { this.image = image; }
     public Double getRating() { return rating; }

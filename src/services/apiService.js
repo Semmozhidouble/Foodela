@@ -45,6 +45,11 @@ export const restaurantAPI = {
     const response = await apiClient.get(`/restaurants/${id}/menu`);
     return response.data;
   },
+  
+  getMenuByCategories: async (id) => {
+    const response = await apiClient.get(`/restaurants/${id}/menu/categories`);
+    return response.data;
+  },
 };
 
 // Order APIs (Phase E4)
