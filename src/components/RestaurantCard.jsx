@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Star, Clock, Tag, Heart } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useToast } from '../context/ToastContext';
 
 const RestaurantCard = ({ data, index }) => {
+  const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
   const { showToast } = useToast();
   const [imageError, setImageError] = useState(false);
@@ -99,6 +101,7 @@ const RestaurantCard = ({ data, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
+      onClick={() => navigate(`/restaurant/${data.id}`)}
       className="glass-card rounded-[2rem] overflow-hidden group cursor-pointer hover:border-primary/20"
     >
       <div className="relative h-48 overflow-hidden">
