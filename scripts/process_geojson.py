@@ -125,7 +125,19 @@ class GeoJSONProcessor:
         rating = round(4.0 + (abs(name_hash) % 10) / 10, 1)  # 4.0-4.9
         delivery_time = 20 + (abs(name_hash) % 30)  # 20-50 minutes
         delivery_fee = round(1.5 + (abs(name_hash) % 30) / 10, 2)  # 1.5-4.5
-        
+
+        # List of valid food images from Unsplash
+        food_images = [
+            "1546069901-ba9599a7e63c", "1568901346375-23c9450c58cd", "1567620905732-2d1ec7ab7445",
+            "1565299624946-b28f40a0ae38", "1540189549336-e6e99c3679fe", "1565958011703-44f9829ba187",
+            "1484723091739-30a097e8f929", "1512621776951-a57141f2eefd", "1467003909585-63c429911d6c",
+            "1544025162-d76690b68f11", "1559339352-11d035aa65de", "1504674900247-0877df9cc836",
+            "1600891964599-f61ba0e24092", "1555939594-58d7cb561ad1", "1565299507177-b0ac66763828",
+            "1567337710229-bd084d543bcd", "1551218808-94e220e084d2", "1579871494447-9811cf80d66c",
+            "1604382354936-07c5d9983bd3", "1550547660-d9450f859349"
+        ]
+        image_id = food_images[abs(name_hash) % len(food_images)]
+
         return {
             'name': name,
             'description': description or f"Delicious {cuisine} cuisine",
@@ -139,7 +151,7 @@ class GeoJSONProcessor:
             'is_open': True,
             'phone': phone,
             'website': website,
-            'image': f"https://images.unsplash.com/photo-{1500000000 + abs(name_hash) % 100000000}?w=800&q=80"
+            'image': f"https://images.unsplash.com/photo-{image_id}?w=800&q=80"
         }
     
     def process_restaurants(self, features: List[Dict]) -> List[Dict]:
