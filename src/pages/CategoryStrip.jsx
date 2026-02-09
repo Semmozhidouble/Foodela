@@ -13,25 +13,28 @@ const categories = [
 
 export default function CategoryStrip() {
   return (
-    <div className="w-full py-10 overflow-hidden">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Explore Categories</h2>
+    <div className="w-full py-16 overflow-hidden bg-[#FAFAFA]">
+      <div className="container mx-auto px-6">
+        <h2 className="text-2xl font-bold mb-8 text-slate-900 tracking-tight">Explore Categories</h2>
         <motion.div 
-          className="flex gap-6 cursor-grab active:cursor-grabbing"
+          className="flex gap-8 cursor-grab active:cursor-grabbing pb-4"
           drag="x"
           dragConstraints={{ right: 0, left: -300 }}
         >
           {categories.map((cat, index) => (
             <motion.div
               key={index}
-              whileHover={{ scale: 1.05, y: -5 }}
+              whileHover={{ y: -10 }}
               whileTap={{ scale: 0.95 }}
-              className="min-w-[120px] h-[140px] flex flex-col items-center justify-center bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300 group"
+              className="relative min-w-[140px] h-[160px] flex flex-col items-center justify-center bg-white/60 backdrop-blur-xl border border-white/60 rounded-[2rem] shadow-sm hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-500 group overflow-hidden"
             >
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm mb-3 group-hover:bg-orange-50 transition-colors">
-                <cat.icon className="w-6 h-6 text-gray-600 group-hover:text-orange-500" />
+              {/* Light Reflection Effect */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent translate-x-[-100%] group-hover:animate-[shimmer_1.5s_infinite] z-0" />
+              
+              <div className="relative z-10 w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-4 group-hover:scale-110 transition-transform duration-300">
+                <cat.icon className="w-7 h-7 text-slate-600 group-hover:text-orange-500 transition-colors" />
               </div>
-              <span className="font-medium text-gray-700 group-hover:text-orange-600">{cat.name}</span>
+              <span className="relative z-10 font-semibold text-slate-700 group-hover:text-slate-900">{cat.name}</span>
             </motion.div>
           ))}
         </motion.div>

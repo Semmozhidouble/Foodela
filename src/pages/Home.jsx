@@ -45,7 +45,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAFAFA] selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden relative">
+      {/* Global Noise Texture */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 mix-blend-overlay" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}></div>
+      
       <Hero />
       <CategoryStrip />
       <FeaturedSection restaurants={featuredRestaurants} loading={loading} />
