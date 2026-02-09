@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { Search } from 'lucide-react';
 
 export default function Hero() {
@@ -7,8 +7,29 @@ export default function Hero() {
   const y1 = useTransform(scrollY, [0, 300], [0, 100]);
   const y2 = useTransform(scrollY, [0, 300], [0, -100]);
 
+  // Cursor Parallax Setup
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e;
+    const { innerWidth, innerHeight } = window;
+    mouseX.set((clientX / innerWidth) - 0.5);
+    mouseY.set((clientY / innerHeight) - 0.5);
+  };
+
+  const springConfig = { stiffness: 100, damping: 30 };
+  const xSpring = useSpring(mouseX, springConfig);
+  const ySpring = useSpring(mouseY, springConfig);
+  
+  const moveX = useTransform(xSpring, [-0.5, 0.5], [30, -30]);
+  const moveY = useTransform(ySpring, [-0.5, 0.5], [30, -30]);
+
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 via-white to-rose-50">
+    <section 
+      onMouseMove={handleMouseMove}
+      className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-50 via-white to-rose-50"
+    >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
@@ -64,15 +85,17 @@ export default function Hero() {
              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80"
              alt="Food"
              className="absolute top-10 right-10 w-64 h-64 object-cover rounded-full shadow-2xl border-4 border-white/50"
-             animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
-             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+             style={{ x: moveX, y: moveY }}
+             animate={{ rotate: [0, 5, 0] }}
+             transition={{ rotate: { duration: 6, repeat: Infinity, ease: "easeInOut" } }}
            />
            <motion.img
              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80"
              alt="Food"
              className="absolute bottom-20 left-10 w-56 h-56 object-cover rounded-full shadow-2xl border-4 border-white/50"
-             animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
-             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+             style={{ x: useTransform(moveX, v => -v), y: useTransform(moveY, v => -v) }}
+             animate={{ rotate: [0, -5, 0] }}
+             transition={{ rotate: { duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
            />
         </div>
       </div>
