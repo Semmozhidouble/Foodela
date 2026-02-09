@@ -1,6 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Plus } from 'lucide-react';
+import { useCinematic } from '../context/CinematicContext';
+import { useSound } from '../context/SoundContext';
 
 const DEFAULT_ITEMS = [
   { id: 1, name: "Truffle Pasta", price: "$24", image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=800&q=80" },
@@ -11,10 +13,21 @@ const DEFAULT_ITEMS = [
 
 export default function Recommendations({ items = [], loading }) {
   const displayItems = items.length > 0 ? items : DEFAULT_ITEMS;
+  const { isCinematic } = useCinematic();
+  const { playSound } = useSound();
+
+  const getSoundForFood = (name) => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes('burger') || lowerName.includes('pasta')) return 'sizzle';
+    if (lowerName.includes('roll') || lowerName.includes('salad')) return 'crunch';
+    if (lowerName.includes('drink') || lowerName.includes('shake') || lowerName.includes('soup')) return 'pour';
+    if (lowerName.includes('cake') || lowerName.includes('dessert')) return 'hover';
+    return 'hover';
+  };
 
   return (
-    <section className="py-20 container mx-auto px-6">
-      <h2 className="text-3xl font-bold text-slate-900 mb-10 tracking-tight">Recommended For You</h2>
+    <section className={`py-20 container mx-auto px-6 transition-colors duration-700 ${isCinematic ? 'bg-transparent' : ''}`}>
+      <h2 className={`text-3xl font-bold mb-10 tracking-tight transition-colors duration-700 ${isCinematic ? 'text-white opacity-30' : 'text-slate-900'}`}>Recommended For You</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {displayItems.map((item, i) => (
           <motion.div
@@ -24,7 +37,8 @@ export default function Recommendations({ items = [], loading }) {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ y: -10 }}
-            className="bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-500 border border-slate-100 group"
+            onMouseEnter={() => playSound(getSoundForFood(item.name))}
+            className={`bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-500 border border-slate-100 group ${isCinematic ? 'z-50 scale-105 shadow-[0_0_60px_rgba(255,255,255,0.15)]' : ''}`}
           >
             <div className="relative h-64 rounded-[2rem] overflow-hidden mb-5">
               <img src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />

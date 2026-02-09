@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { Search, MapPin, ArrowRight } from 'lucide-react';
+import { useCinematic } from '../context/CinematicContext';
 
 export default function Hero() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const { isCinematic } = useCinematic();
 
   // Text Animation Variants
   const container = {
@@ -130,7 +132,7 @@ export default function Hero() {
            <motion.img
              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80"
              alt="Food"
-             className="absolute top-20 right-10 w-80 h-80 object-cover rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] border-8 border-white/30 backdrop-blur-sm z-20"
+             className={`absolute top-20 right-10 w-80 h-80 object-cover rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] border-8 border-white/30 backdrop-blur-sm transition-all duration-700 ${isCinematic ? 'z-50 scale-110 shadow-[0_0_100px_rgba(255,165,0,0.4)] grayscale-0' : 'z-20'}`}
              style={{ x: moveX, y: moveY }}
              animate={{ rotate: [0, 3, 0], y: [0, -15, 0] }}
              transition={{ 
@@ -141,7 +143,7 @@ export default function Hero() {
            <motion.img
              src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80"
              alt="Food"
-             className="absolute bottom-32 left-10 w-64 h-64 object-cover rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] border-8 border-white/30 backdrop-blur-sm z-10"
+             className={`absolute bottom-32 left-10 w-64 h-64 object-cover rounded-full shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] border-8 border-white/30 backdrop-blur-sm transition-all duration-700 ${isCinematic ? 'z-50 scale-110 shadow-[0_0_100px_rgba(255,165,0,0.4)] grayscale-0' : 'z-10'}`}
              style={{ x: useTransform(moveX, v => -v * 1.5), y: useTransform(moveY, v => -v * 1.5) }}
              animate={{ rotate: [0, -3, 0], y: [0, 20, 0] }}
              transition={{ 

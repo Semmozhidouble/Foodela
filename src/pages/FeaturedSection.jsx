@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Star, Clock, ArrowRight, Flame } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useCinematic } from '../context/CinematicContext';
+import { useSound } from '../context/SoundContext';
 
 const DEFAULT_RESTAURANTS = [
   {
@@ -31,12 +33,27 @@ const DEFAULT_RESTAURANTS = [
 ];
 
 const FeaturedCard = ({ item }) => {
+  const { isCinematic } = useCinematic();
+  const { playSound } = useSound();
+
+  const handleHover = () => {
+    // Map cuisine to sound effect
+    if (item.cuisine.includes('Indian') || item.cuisine.includes('Woodfire')) {
+      playSound('sizzle');
+    } else if (item.cuisine.includes('Sushi') || item.cuisine.includes('Japanese')) {
+      playSound('crunch');
+    } else {
+      playSound('hover');
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="min-w-[320px] md:min-w-[450px] h-[600px] relative rounded-[2rem] overflow-hidden cursor-pointer snap-center group"
+      onMouseEnter={handleHover}
+      className={`min-w-[320px] md:min-w-[450px] h-[600px] relative rounded-[2rem] overflow-hidden cursor-pointer snap-center group transition-all duration-700 ${isCinematic ? 'z-50 scale-105 shadow-[0_0_80px_rgba(255,255,255,0.2)]' : ''}`}
     >
       <Link to={`/restaurant/${item.id}`} className="block w-full h-full">
         {/* Background Image with Zoom Effect */}
@@ -104,16 +121,17 @@ const FeaturedCard = ({ item }) => {
 
 export default function FeaturedSection({ restaurants = [], loading }) {
   const displayItems = restaurants.length > 0 ? restaurants : DEFAULT_RESTAURANTS;
+  const { isCinematic } = useCinematic();
 
   return (
-    <section className="py-20 bg-white">
+    <section className={`py-20 transition-colors duration-700 ${isCinematic ? 'bg-transparent' : 'bg-white'}`}>
       <div className="container mx-auto px-6">
-        <div className="flex justify-between items-end mb-12">
+        <div className={`flex justify-between items-end mb-12 transition-opacity duration-500 ${isCinematic ? 'opacity-30' : 'opacity-100'}`}>
           <div>
-            <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Featured Collections</h2>
-            <p className="text-slate-500 mt-2 text-lg">Curated premium dining experiences selected for you</p>
+            <h2 className={`text-4xl font-bold tracking-tight ${isCinematic ? 'text-white' : 'text-slate-900'}`}>Featured Collections</h2>
+            <p className={`mt-2 text-lg ${isCinematic ? 'text-slate-400' : 'text-slate-500'}`}>Curated premium dining experiences selected for you</p>
           </div>
-          <button className="text-slate-900 font-bold hover:text-orange-600 transition-colors flex items-center gap-2 group">
+          <button className={`${isCinematic ? 'text-white' : 'text-slate-900'} font-bold hover:text-orange-600 transition-colors flex items-center gap-2 group`}>
             View All <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>

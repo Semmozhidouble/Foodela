@@ -21,6 +21,8 @@ import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { OrderProvider } from './context/OrderContext';
+import { CinematicProvider } from './context/CinematicContext';
+import { SoundProvider } from './context/SoundContext';
 import Layout from './components/Layout';
 import PageTransition from './components/PageTransition';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -61,11 +63,15 @@ function App() {
         <FavoritesProvider>
           <CartProvider>
             <AuthProvider>
-              <OrderProvider>
-                <Router>
-                  <AppContent />
-                </Router>
-              </OrderProvider>
+              <CinematicProvider>
+                <SoundProvider>
+                  <OrderProvider>
+                    <Router>
+                      <AppContent />
+                    </Router>
+                  </OrderProvider>
+                </SoundProvider>
+              </CinematicProvider>
             </AuthProvider>
           </CartProvider>
         </FavoritesProvider>
