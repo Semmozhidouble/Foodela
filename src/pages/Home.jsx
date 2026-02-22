@@ -1,92 +1,68 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowRight, MapPin } from 'lucide-react';
-import RestaurantCard from '../components/RestaurantCard';
-import { restaurants, categories } from '../data/mockData';
+import React, { useEffect, useState } from 'react';
+import Hero from './Hero';
+import CategoryStrip from './CategoryStrip';
+import FeaturedSection from './FeaturedSection';
+import Recommendations from './Recommendations';
+import CartDrawer from '../components/CartDrawer';
+import { restaurantAPI } from '../services/apiService';
+import { useCinematic } from '../context/CinematicContext';
+import CinematicToggle from '../components/CinematicToggle';
+import SoundToggle from '../components/SoundToggle';
 
-const Home = () => {
+export default function Home() {
+  const [featuredRestaurants, setFeaturedRestaurants] = useState([]);
+  const [recommendedItems, setRecommendedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { isCinematic } = useCinematic();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch restaurants
+        const restaurants = await restaurantAPI.getAll().catch(() => []);
+        
+        // Filter for featured (mock logic: top rated or specific flag)
+        const featured = restaurants.filter(r => r.rating >= 4.5).slice(0, 5);
+        setFeaturedRestaurants(featured.length > 0 ? featured : []);
+
+        // Mock recommendations from restaurant menus
+        // In a real app, this would be a dedicated endpoint like restaurantAPI.getRecommendations()
+        const recommendations = [];
+        if (restaurants.length > 0) {
+          // Try to get items from the first few restaurants
+          for (let i = 0; i < Math.min(3, restaurants.length); i++) {
+            const menu = await restaurantAPI.getMenuByCategories(restaurants[i].id).catch(() => []);
+            if (menu && menu.length > 0 && menu[0].items) {
+              recommendations.push(...menu[0].items.slice(0, 2).map(item => ({...item, restaurantName: restaurants[i].name})));
+            }
+          }
+        }
+        setRecommendedItems(recommendations.slice(0, 4));
+      } catch (error) {
+        console.error("Failed to load home data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="pt-24 pb-20 px-6 max-w-7xl mx-auto">
-      {/* Hero Section */}
-      <section className="mb-12 relative">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-primary rounded-[3rem] p-8 md:p-16 text-white relative overflow-hidden shadow-glow"
-        >
-          <div className="relative z-10 max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full mb-6 border border-white/20">
-              <span className="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
-              <span className="text-sm font-medium">Fastest Delivery in Town</span>
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight">
-              Taste the <span className="text-accent">Future</span> of <br/> Food Delivery
-            </h1>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/restaurants">
-                <button className="bg-white text-primary px-8 py-4 rounded-2xl font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-black/10">
-                  Order Now <ArrowRight size={20} />
-                </button>
-              </Link>
-              <div className="glass bg-white/10 border-white/20 px-6 py-4 rounded-2xl flex items-center gap-3">
-                <div className="bg-white/20 p-2 rounded-full">
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <p className="text-xs opacity-80">Delivering to</p>
-                  <p className="font-semibold">Downtown, New York</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Abstract Background Shapes */}
-          <motion.div 
-            animate={{ rotate: 360 }}
-            transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
-            className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"
-          />
-          <motion.div 
-            animate={{ rotate: -360 }}
-            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/20 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4"
-          />
-        </motion.div>
-      </section>
-
-      {/* Categories */}
-      <section className="mb-12">
-        <div className="flex justify-between items-end mb-6">
-          <h2 className="text-2xl font-bold text-slate-800">Categories</h2>
-        </div>
-        <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4">
-          {categories.map((cat, i) => (
-            <motion.div 
-              key={cat.id}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="min-w-[100px] h-[120px] glass-card rounded-[2rem] flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-white transition-colors"
-            >
-              <span className="text-4xl">{cat.icon}</span>
-              <span className="font-medium text-slate-600">{cat.name}</span>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Popular Restaurants */}
-      <section>
-        <h2 className="text-2xl font-bold text-slate-800 mb-6">Popular Near You</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {restaurants.map((restaurant, index) => (
-            <RestaurantCard key={restaurant.id} data={restaurant} index={index} />
-          ))}
-        </div>
-      </section>
+    <div className={`min-h-screen selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden relative transition-colors duration-700 ${isCinematic ? 'bg-black' : 'bg-[#FAFAFA]'}`}>
+      {/* Global Noise Texture */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 mix-blend-overlay" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}></div>
+      
+      {/* Cinematic Overlay */}
+      <div className={`fixed inset-0 bg-black/90 z-40 pointer-events-none transition-opacity duration-700 ${isCinematic ? 'opacity-100' : 'opacity-0'}`} />
+      
+      <Hero />
+      <CategoryStrip />
+      <FeaturedSection restaurants={featuredRestaurants} loading={loading} />
+      <Recommendations items={recommendedItems} loading={loading} />
+      <CartDrawer />
+      <CinematicToggle />
+      <SoundToggle />
     </div>
   );
-};
-
-export default Home;
+}

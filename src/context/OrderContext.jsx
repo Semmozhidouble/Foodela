@@ -19,10 +19,11 @@ export const OrderProvider = ({ children }) => {
   const [orderHistory, setOrderHistory] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
 
-  // Connect WebSocket when user is authenticated
+  // Connect WebSocket only when there's an active order
   useEffect(() => {
-    if (isAuthenticated) {
+    if (activeOrder) {
       websocketService.connect(() => {
+        console.log('🔌 WebSocket connected for order tracking');
         setIsConnected(true);
       });
 
@@ -31,7 +32,7 @@ export const OrderProvider = ({ children }) => {
         setIsConnected(false);
       };
     }
-  }, [isAuthenticated]);
+  }, [activeOrder]);
 
   // Subscribe to active order updates
   useEffect(() => {
@@ -89,7 +90,8 @@ export const OrderProvider = ({ children }) => {
 
   return (
     <OrderContext.Provider value={{ 
-      activeOrder, 
+      activeOrder,
+      setActiveOrder,
       orderHistory, 
       placeOrder,
       fetchOrderHistory,
