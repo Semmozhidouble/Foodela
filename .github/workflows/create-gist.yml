@@ -1,4 +1,6 @@
 name: Create GitHub Gist
+# Prerequisites: create a PAT with the 'gist' scope and store it as the
+# repository secret GIST_TOKEN.  See README.md for step-by-step instructions.
 
 on:
   push:
